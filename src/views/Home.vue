@@ -286,7 +286,7 @@ const logoAnimation = computed(() => {
     </Motion>
 
     <!-- Content Container -->
-    <div class="relative h-dvh flex items-center justify-center">
+    <section class="relative h-dvh flex items-center justify-center">
       <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl w-full">
         <!-- Scene 1: SARANDO -->
         <section
@@ -403,7 +403,7 @@ const logoAnimation = computed(() => {
           </Motion>
         </section>
       </div>
-    </div>
+    </section>
 
     <!-- Dock Navigation -->
     <Motion
