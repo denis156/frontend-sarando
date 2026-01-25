@@ -1,41 +1,23 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, computed, h } from 'vue'
+import { computed, h } from 'vue'
 import { Motion } from 'motion-v'
 import { ChevronLeft, ChevronRight, ChevronUp, ChevronDown, Flag } from 'lucide-vue-next'
+import { RouterLink } from 'vue-router'
 import DockNav from '@/components/navigation/DockNav.vue'
 import type { DockItemData } from '@/components/navigation/DockNav.vue'
+import { Button } from '@/components/ui/button'
 import Silk from '@/components/ui/background/Silk.vue'
 import SubmarkLogo from '@/assets/submark-logo.png'
+import { useBreakpoint } from '@/composables/useBreakpoint'
+import { useImagePreload } from '@/composables/useImagePreload'
+import { useSceneNavigation } from '@/composables/useSceneNavigation'
+import type { Scene } from '@/types/scene'
 
-const currentScene = ref(0)
+// Composables
+const { isMobile } = useBreakpoint(768)
+const { isLoaded: isLogoLoaded } = useImagePreload(SubmarkLogo)
 
-// Transition lock
-const isTransitioning = ref(false)
-const transitionDirection = ref<'next' | 'prev'>('next')
-const isMobile = ref(false)
-
-// Image preload
-const isLogoLoaded = ref(false)
-
-// Preload logo image
-const preloadLogo = () => {
-  const img = new Image()
-  img.onload = () => {
-    isLogoLoaded.value = true
-  }
-  img.onerror = () => {
-    // Even if error, set to true to prevent blocking
-    isLogoLoaded.value = true
-  }
-  img.src = SubmarkLogo
-}
-
-// Check screen size
-const checkScreenSize = () => {
-  isMobile.value = window.innerWidth < 768 // md breakpoint
-}
-
-const scenes = [
+const scenes: Scene[] = [
   {
     id: 1,
     title: 'SARANDO',
@@ -61,21 +43,9 @@ const scenes = [
   },
 ]
 
-// Change scene with animation
-const changeScene = (newScene: number, direction: 'next' | 'prev') => {
-  if (isTransitioning.value) return
-  if (newScene < 0 || newScene >= scenes.length) return
-  if (newScene === currentScene.value) return
-
-  isTransitioning.value = true
-  transitionDirection.value = direction
-  currentScene.value = newScene
-
-  // Unlock after transition
-  setTimeout(() => {
-    isTransitioning.value = false
-  }, 900) // Duration of transition
-}
+// Scene Navigation
+const { currentScene, transitionDirection, nextScene, previousScene, goToEnd, goToStart } =
+  useSceneNavigation(scenes, 900)
 
 // Animation for content inside scenes (title, subtitle, paragraph, etc)
 const contentInitial = computed(() => {
@@ -94,30 +64,10 @@ const contentExit = computed(() => {
   }
 })
 
-// Navigation functions
-const nextScene = () => {
-  if (currentScene.value < scenes.length - 1 && !isTransitioning.value) {
-    changeScene(currentScene.value + 1, 'next')
-  }
-}
-
-const previousScene = () => {
-  if (currentScene.value > 0 && !isTransitioning.value) {
-    changeScene(currentScene.value - 1, 'prev')
-  }
-}
-
-const goToEnd = () => {
-  if (currentScene.value !== scenes.length - 1 && !isTransitioning.value) {
-    changeScene(scenes.length - 1, 'next')
-  }
-}
-
-const goToStart = () => {
-  if (currentScene.value !== 0 && !isTransitioning.value) {
-    changeScene(0, 'prev')
-  }
-}
+// Button size responsive
+const buttonSize = computed(() => {
+  return isMobile.value ? 'default' : 'lg'
+})
 
 // Dock items - 3 items only: Previous, Finish/Start, Next
 const dockItems = computed<DockItemData[]>(() => {
@@ -160,29 +110,6 @@ const dockItems = computed<DockItemData[]>(() => {
   ]
 })
 
-onMounted(() => {
-  // Check initial screen size
-  checkScreenSize()
-
-  // Add preload hint to browser
-  const preloadLink = document.createElement('link')
-  preloadLink.rel = 'preload'
-  preloadLink.as = 'image'
-  preloadLink.href = SubmarkLogo
-  document.head.appendChild(preloadLink)
-
-  // Preload logo image to prevent glitches
-  preloadLogo()
-
-  // Add resize listener
-  window.addEventListener('resize', checkScreenSize)
-})
-
-onUnmounted(() => {
-  // Remove resize listener
-  window.removeEventListener('resize', checkScreenSize)
-})
-
 // Logo initial state
 const logoInitialState = computed(() => ({
   opacity: 0,
@@ -202,7 +129,7 @@ const logoAnimation = computed(() => {
   const sceneStates = {
     0: {
       // Scene 1: Logo normal di atas
-      y: isMobile.value ? '-15dvh' : '-30dvh',
+      y: isMobile.value ? '-20dvh' : '-40dvh',
       scale: isMobile.value ? 1.0 : 1.0,
       opacity: 1,
       filter: 'grayscale(0%) brightness(100%)',
@@ -229,7 +156,7 @@ const logoAnimation = computed(() => {
     },
     3: {
       // Scene 4: Logo kembali ke atas
-      y: isMobile.value ? '-15dvh' : '-30dvh',
+      y: isMobile.value ? '-20dvh' : '-40dvh',
       scale: isMobile.value ? 1.0 : 1.0,
       opacity: 1,
       filter: 'grayscale(0%) brightness(100%)',
@@ -400,6 +327,27 @@ const logoAnimation = computed(() => {
             >
               {{ scenes[3]?.subtitle }}
             </p>
+          </Motion>
+
+          <!-- CTA Buttons -->
+          <Motion
+            :initial="contentInitial"
+            :animate="contentAnimate"
+            :exit="contentExit"
+            :transition="{ duration: 0.7, delay: 0.9, ease: 'easeOut' }"
+          >
+            <div class="flex flex-row gap-4 justify-center items-center mt-8">
+              <Button as-child :size="buttonSize" variant="default">
+                <RouterLink to="/layanan">
+                  Lihat Layanan Kami
+                </RouterLink>
+              </Button>
+              <Button as-child :size="buttonSize" variant="outline">
+                <RouterLink to="/proyek">
+                  Jelajahi Proyek
+                </RouterLink>
+              </Button>
+            </div>
           </Motion>
         </section>
       </div>

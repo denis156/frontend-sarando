@@ -3,8 +3,8 @@
   <div class="fixed inset-0 w-full h-dvh z-50" style="pointer-events: none;">
     <StaggeredMenu
       position="right"
-      :items="menuItems"
-      :social-items="socialItems"
+      :items="MENU_ITEMS"
+      :social-items="SOCIAL_ITEMS"
       :display-socials="true"
       :display-item-numbering="true"
       menu-button-color="#f0e491"
@@ -24,22 +24,7 @@
 
 <script setup lang="ts">
 import StaggeredMenu from '@/components/navigation/StaggeredMenu.vue'
-
-// Menu configuration
-const menuItems = [
-  { label: 'Beranda', ariaLabel: 'Kembali ke halaman utama', link: '/' },
-  { label: 'Layanan', ariaLabel: 'Lihat layanan kami', link: '/layanan' },
-  { label: 'Proyek', ariaLabel: 'Lihat proyek kami', link: '/proyek' },
-  { label: 'Harga', ariaLabel: 'Lihat daftar harga', link: '/harga' },
-  { label: 'Blog', ariaLabel: 'Lihat blog kami', link: '/blog' },
-  { label: 'Kontak', ariaLabel: 'Hubungi kami', link: '/kontak' }
-]
-
-const socialItems = [
-  { label: 'Twitter', link: 'https://twitter.com' },
-  { label: 'GitHub', link: 'https://github.com' },
-  { label: 'LinkedIn', link: 'https://linkedin.com' }
-]
+import { MENU_ITEMS, SOCIAL_ITEMS } from '@/constants/navigation'
 
 const handleMenuOpen = () => console.log('Menu opened')
 const handleMenuClose = () => console.log('Menu closed')
