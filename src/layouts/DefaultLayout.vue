@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import StaggeredMenu from '@/components/ui/global/StaggeredMenu.vue'
+import StaggeredMenu from '@/components/navigation/StaggeredMenu.vue'
 
 // Menu configuration
 const menuItems = [

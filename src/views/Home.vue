@@ -2,8 +2,8 @@
 import { ref, onMounted, onUnmounted, computed, h } from 'vue'
 import { Motion } from 'motion-v'
 import { ChevronLeft, ChevronRight, ChevronUp, ChevronDown, Flag } from 'lucide-vue-next'
-import Dock from '@/components/ui/global/Dock.vue'
-import type { DockItemData } from '@/components/ui/global/Dock.vue'
+import DockNav from '@/components/navigation/DockNav.vue'
+import type { DockItemData } from '@/components/navigation/DockNav.vue'
 import Silk from '@/components/ui/background/Silk.vue'
 import SubmarkLogo from '@/assets/submark-logo.png'
 
@@ -413,7 +413,7 @@ const logoAnimation = computed(() => {
       class="fixed bottom-0 left-0 right-0 z-20 pointer-events-none"
     >
       <div class="pointer-events-auto">
-        <Dock
+        <DockNav
           :items="dockItems"
           :baseItemSize="48"
           :magnification="68"

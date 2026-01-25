@@ -279,7 +279,7 @@ const DockIcon = defineComponent({
 });
 
 export default defineComponent({
-  name: 'Dock',
+  name: 'DockNav',
   components: {
     DockItem
   }
