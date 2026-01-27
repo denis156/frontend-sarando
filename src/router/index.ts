@@ -24,12 +24,7 @@ const router = createRouter({
           name: 'proyek',
           component: () => import('@/views/Proyek.vue'),
         },
-        {
-          path: 'harga',
-          name: 'harga',
-          component: () => import('@/views/Harga.vue'),
-        },
-        {
+{
           path: 'layanan',
           name: 'layanan',
           component: () => import('@/views/Layanan.vue'),

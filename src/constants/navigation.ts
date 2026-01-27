@@ -7,7 +7,6 @@ export const MENU_ITEMS: StaggeredMenuItem[] = [
   { label: 'Beranda', ariaLabel: 'Kembali ke halaman utama', link: '/' },
   { label: 'Layanan', ariaLabel: 'Lihat layanan kami', link: '/layanan' },
   { label: 'Proyek', ariaLabel: 'Lihat proyek kami', link: '/proyek' },
-  { label: 'Harga', ariaLabel: 'Lihat daftar harga', link: '/harga' },
   { label: 'Blog', ariaLabel: 'Lihat blog kami', link: '/blog' },
   { label: 'Kontak', ariaLabel: 'Hubungi kami', link: '/kontak' },
 ]
