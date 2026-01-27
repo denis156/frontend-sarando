@@ -3,17 +3,17 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, watch, type CSSProperties, useTemplateRef } from 'vue';
-import { Renderer, Program, Mesh, Plane, Camera } from 'ogl';
+import { onMounted, onUnmounted, watch, type CSSProperties, useTemplateRef } from 'vue'
+import { Renderer, Program, Mesh, Plane, Camera } from 'ogl'
 
 interface SilkProps {
-  speed?: number;
-  scale?: number;
-  color?: string;
-  noiseIntensity?: number;
-  rotation?: number;
-  className?: string;
-  style?: CSSProperties;
+  speed?: number
+  scale?: number
+  color?: string
+  noiseIntensity?: number
+  rotation?: number
+  className?: string
+  style?: CSSProperties
 }
 
 const props = withDefaults(defineProps<SilkProps>(), {
@@ -23,18 +23,18 @@ const props = withDefaults(defineProps<SilkProps>(), {
   noiseIntensity: 1.5,
   rotation: 0,
   className: '',
-  style: () => ({})
-});
+  style: () => ({}),
+})
 
-const containerRef = useTemplateRef<HTMLDivElement>('containerRef');
+const containerRef = useTemplateRef<HTMLDivElement>('containerRef')
 
 const hexToNormalizedRGB = (hex: string): [number, number, number] => {
-  const clean = hex.replace('#', '');
-  const r = parseInt(clean.slice(0, 2), 16) / 255;
-  const g = parseInt(clean.slice(2, 4), 16) / 255;
-  const b = parseInt(clean.slice(4, 6), 16) / 255;
-  return [r, g, b];
-};
+  const clean = hex.replace('#', '')
+  const r = parseInt(clean.slice(0, 2), 16) / 255
+  const g = parseInt(clean.slice(2, 4), 16) / 255
+  const b = parseInt(clean.slice(4, 6), 16) / 255
+  return [r, g, b]
+}
 
 const vertexShader = `
 attribute vec2 uv;
@@ -51,7 +51,7 @@ void main() {
   vUv = uv;
   gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
 }
-`;
+`
 
 const fragmentShader = `
 precision highp float;
@@ -99,75 +99,75 @@ void main() {
   col.a = 1.0;
   gl_FragColor = col;
 }
-`;
+`
 
-let renderer: Renderer | null = null;
-let mesh: Mesh | null = null;
-let program: Program | null = null;
-let camera: Camera | null = null;
-let animateId = 0;
+let renderer: Renderer | null = null
+let mesh: Mesh | null = null
+let program: Program | null = null
+let camera: Camera | null = null
+let animateId = 0
 
 const initSilk = () => {
-  const container = containerRef.value;
-  if (!container) return;
+  const container = containerRef.value
+  if (!container) return
 
   renderer = new Renderer({
     alpha: true,
-    antialias: true
-  });
+    antialias: true,
+  })
 
-  const gl = renderer.gl;
-  gl.clearColor(0, 0, 0, 0);
-  gl.canvas.style.backgroundColor = 'transparent';
+  const gl = renderer.gl
+  gl.clearColor(0, 0, 0, 0)
+  gl.canvas.style.backgroundColor = 'transparent'
 
-  camera = new Camera(gl, { fov: 75 });
-  camera.position.z = 1;
+  camera = new Camera(gl, { fov: 75 })
+  camera.position.z = 1
 
   const resize = () => {
-    if (!container || !camera) return;
+    if (!container || !camera) return
 
-    let width = container.offsetWidth;
-    let height = container.offsetHeight;
+    let width = container.offsetWidth
+    let height = container.offsetHeight
 
-    let parent = container.parentElement;
+    let parent = container.parentElement
     while (parent && (!width || !height)) {
       if (parent.offsetWidth && parent.offsetHeight) {
-        width = parent.offsetWidth;
-        height = parent.offsetHeight;
-        break;
+        width = parent.offsetWidth
+        height = parent.offsetHeight
+        break
       }
-      parent = parent.parentElement;
+      parent = parent.parentElement
     }
 
     if (!width || !height) {
-      width = window.innerWidth;
-      height = window.innerHeight;
+      width = window.innerWidth
+      height = window.innerHeight
     }
 
-    width = Math.max(width, 300);
-    height = Math.max(height, 300);
+    width = Math.max(width, 300)
+    height = Math.max(height, 300)
 
-    renderer!.setSize(width, height);
-    camera.perspective({ aspect: width / height });
+    renderer!.setSize(width, height)
+    camera.perspective({ aspect: width / height })
 
     if (mesh) {
-      const distance = camera.position.z;
-      const fov = camera.fov * (Math.PI / 180);
-      const height2 = 2 * Math.tan(fov / 2) * distance;
-      const width2 = height2 * (width / height);
+      const distance = camera.position.z
+      const fov = camera.fov * (Math.PI / 180)
+      const height2 = 2 * Math.tan(fov / 2) * distance
+      const width2 = height2 * (width / height)
 
-      mesh.scale.set(width2, height2, 1);
+      mesh.scale.set(width2, height2, 1)
     }
-  };
+  }
 
-  window.addEventListener('resize', resize);
+  window.addEventListener('resize', resize)
 
   const geometry = new Plane(gl, {
     width: 1,
-    height: 1
-  });
+    height: 1,
+  })
 
-  const colorRGB = hexToNormalizedRGB(props.color);
+  const colorRGB = hexToNormalizedRGB(props.color)
 
   program = new Program(gl, {
     vertex: vertexShader,
@@ -178,81 +178,81 @@ const initSilk = () => {
       uNoiseIntensity: { value: props.noiseIntensity },
       uColor: { value: colorRGB },
       uRotation: { value: props.rotation },
-      uTime: { value: 0 }
-    }
-  });
+      uTime: { value: 0 },
+    },
+  })
 
-  mesh = new Mesh(gl, { geometry, program });
-  container.appendChild(gl.canvas);
+  mesh = new Mesh(gl, { geometry, program })
+  container.appendChild(gl.canvas)
 
-  gl.canvas.style.width = '100%';
-  gl.canvas.style.height = '100%';
-  gl.canvas.style.display = 'block';
-  gl.canvas.style.position = 'absolute';
-  gl.canvas.style.top = '0';
-  gl.canvas.style.left = '0';
-  gl.canvas.style.zIndex = '1';
+  gl.canvas.style.width = '100%'
+  gl.canvas.style.height = '100%'
+  gl.canvas.style.display = 'block'
+  gl.canvas.style.position = 'absolute'
+  gl.canvas.style.top = '0'
+  gl.canvas.style.left = '0'
+  gl.canvas.style.zIndex = '1'
 
-  let lastTime = 0;
+  let lastTime = 0
   const update = (t: number) => {
-    animateId = requestAnimationFrame(update);
-    const deltaTime = (t - lastTime) / 1000;
-    lastTime = t;
+    animateId = requestAnimationFrame(update)
+    const deltaTime = (t - lastTime) / 1000
+    lastTime = t
 
     if (program && mesh && camera) {
-      program.uniforms.uTime.value += 0.1 * deltaTime;
-      program.uniforms.uSpeed.value = props.speed;
-      program.uniforms.uScale.value = props.scale;
-      program.uniforms.uNoiseIntensity.value = props.noiseIntensity;
-      program.uniforms.uColor.value = hexToNormalizedRGB(props.color);
-      program.uniforms.uRotation.value = props.rotation;
-      renderer!.render({ scene: mesh, camera });
+      program.uniforms.uTime.value += 0.1 * deltaTime
+      program.uniforms.uSpeed.value = props.speed
+      program.uniforms.uScale.value = props.scale
+      program.uniforms.uNoiseIntensity.value = props.noiseIntensity
+      program.uniforms.uColor.value = hexToNormalizedRGB(props.color)
+      program.uniforms.uRotation.value = props.rotation
+      renderer!.render({ scene: mesh, camera })
     }
-  };
-  animateId = requestAnimationFrame(update);
+  }
+  animateId = requestAnimationFrame(update)
 
-  resize();
+  resize()
 
   return () => {
-    cancelAnimationFrame(animateId);
-    window.removeEventListener('resize', resize);
+    cancelAnimationFrame(animateId)
+    window.removeEventListener('resize', resize)
     if (container && gl.canvas.parentNode === container) {
-      container.removeChild(gl.canvas);
+      container.removeChild(gl.canvas)
     }
-    gl.getExtension('WEBGL_lose_context')?.loseContext();
-  };
-};
+    gl.getExtension('WEBGL_lose_context')?.loseContext()
+  }
+}
 
 const cleanup = () => {
   if (animateId) {
-    cancelAnimationFrame(animateId);
+    cancelAnimationFrame(animateId)
   }
   if (renderer) {
-    const gl = renderer.gl;
-    const container = containerRef.value;
+    const gl = renderer.gl
+    const container = containerRef.value
     if (container && gl.canvas.parentNode === container) {
-      container.removeChild(gl.canvas);
+      container.removeChild(gl.canvas)
     }
-    gl.getExtension('WEBGL_lose_context')?.loseContext();
+    gl.getExtension('WEBGL_lose_context')?.loseContext()
   }
-  renderer = null;
-  mesh = null;
-  camera = null;
-  program = null;
-};
+  renderer = null
+  mesh = null
+  camera = null
+  program = null
+}
 
 onMounted(() => {
-  initSilk();
-});
+  initSilk()
+})
 
 onUnmounted(() => {
-  cleanup();
-});
+  cleanup()
+})
 
 watch(
   () => [props.speed, props.scale, props.color, props.noiseIntensity, props.rotation],
-  () => {}
-);
+  () => {},
+)
 </script>
 
 <style scoped>

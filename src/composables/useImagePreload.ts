@@ -33,6 +33,6 @@ export function useImagePreload(imageSrc: string) {
   })
 
   return {
-    isLoaded
+    isLoaded,
   }
 }

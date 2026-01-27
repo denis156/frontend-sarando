@@ -338,14 +338,10 @@ const logoAnimation = computed(() => {
           >
             <div class="flex flex-row gap-4 justify-center items-center mt-8">
               <Button as-child :size="buttonSize" variant="default">
-                <RouterLink to="/layanan">
-                  Lihat Layanan Kami
-                </RouterLink>
+                <RouterLink to="/layanan"> Lihat Layanan Kami </RouterLink>
               </Button>
               <Button as-child :size="buttonSize" variant="outline">
-                <RouterLink to="/proyek">
-                  Jelajahi Proyek
-                </RouterLink>
+                <RouterLink to="/proyek"> Jelajahi Proyek </RouterLink>
               </Button>
             </div>
           </Motion>

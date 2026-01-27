@@ -49,7 +49,9 @@
                 class="absolute inset-0 w-full h-full object-cover"
               />
               <!-- Overlay -->
-              <div class="absolute inset-0 bg-linear-to-b from-black/80 via-black/40 to-transparent"></div>
+              <div
+                class="absolute inset-0 bg-linear-to-b from-black/80 via-black/40 to-transparent"
+              ></div>
               <!-- Content -->
               <div class="absolute top-0 left-0 right-0 p-3">
                 <div class="flex items-center">
@@ -120,7 +122,9 @@
                     class="absolute inset-0 w-full h-full object-cover"
                   />
                   <!-- Overlay -->
-                  <div class="absolute inset-0 bg-linear-to-b from-black/80 via-black/40 to-transparent"></div>
+                  <div
+                    class="absolute inset-0 bg-linear-to-b from-black/80 via-black/40 to-transparent"
+                  ></div>
                   <!-- Content -->
                   <div class="absolute top-0 left-0 right-0 p-6">
                     <div class="flex items-center">

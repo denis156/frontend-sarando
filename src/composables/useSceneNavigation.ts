@@ -59,6 +59,6 @@ export function useSceneNavigation(scenes: Scene[], transitionDuration: number =
     nextScene,
     previousScene,
     goToEnd,
-    goToStart
+    goToStart,
   }
 }

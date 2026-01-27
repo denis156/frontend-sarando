@@ -1,6 +1,6 @@
 <template>
   <!-- Staggered Menu -->
-  <div class="fixed inset-0 w-full h-dvh z-50" style="pointer-events: none;">
+  <div class="fixed inset-0 w-full h-dvh z-50" style="pointer-events: none">
     <StaggeredMenu
       position="right"
       :items="MENU_ITEMS"

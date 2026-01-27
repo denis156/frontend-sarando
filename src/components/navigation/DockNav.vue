@@ -1,26 +1,26 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, defineComponent, h } from 'vue';
-import { useMotionValue, useSpring, useTransform } from 'motion-v';
+import { ref, computed, onMounted, onUnmounted, defineComponent, h } from 'vue'
+import { useMotionValue, useSpring, useTransform } from 'motion-v'
 
-export type SpringOptions = NonNullable<Parameters<typeof useSpring>[1]>;
+export type SpringOptions = NonNullable<Parameters<typeof useSpring>[1]>
 
 export type DockItemData = {
-  icon: unknown;
-  label: unknown;
-  onClick: () => void;
-  className?: string;
-};
+  icon: unknown
+  label: unknown
+  onClick: () => void
+  className?: string
+}
 
 export type DockProps = {
-  items: DockItemData[];
-  className?: string;
-  distance?: number;
-  panelHeight?: number;
-  baseItemSize?: number;
-  dockHeight?: number;
-  magnification?: number;
-  spring?: SpringOptions;
-};
+  items: DockItemData[]
+  className?: string
+  distance?: number
+  panelHeight?: number
+  baseItemSize?: number
+  dockHeight?: number
+  magnification?: number
+  spring?: SpringOptions
+}
 
 const props = withDefaults(defineProps<DockProps>(), {
   className: '',
@@ -29,45 +29,50 @@ const props = withDefaults(defineProps<DockProps>(), {
   baseItemSize: 50,
   dockHeight: 256,
   magnification: 70,
-  spring: () => ({ mass: 0.1, stiffness: 150, damping: 12 })
-});
+  spring: () => ({ mass: 0.1, stiffness: 150, damping: 12 }),
+})
 
-const mouseX = useMotionValue(Infinity);
-const isHovered = useMotionValue(0);
-const currentHeight = ref(props.panelHeight);
+const mouseX = useMotionValue(Infinity)
+const isHovered = useMotionValue(0)
+const currentHeight = ref(props.panelHeight)
 
-const maxHeight = computed(() => Math.max(props.dockHeight, props.magnification + props.magnification / 2 + 4));
+const maxHeight = computed(() =>
+  Math.max(props.dockHeight, props.magnification + props.magnification / 2 + 4),
+)
 
-const heightRow = useTransform(isHovered, [0, 1], [props.panelHeight, maxHeight.value]);
-const height = useSpring(heightRow, props.spring);
+const heightRow = useTransform(isHovered, [0, 1], [props.panelHeight, maxHeight.value])
+const height = useSpring(heightRow, props.spring)
 
-let unsubscribeHeight: (() => void) | null = null;
+let unsubscribeHeight: (() => void) | null = null
 
 onMounted(() => {
   unsubscribeHeight = height.on('change', (latest: number) => {
-    currentHeight.value = latest;
-  });
-});
+    currentHeight.value = latest
+  })
+})
 
 onUnmounted(() => {
   if (unsubscribeHeight) {
-    unsubscribeHeight();
+    unsubscribeHeight()
   }
-});
+})
 
 const handleMouseMove = (event: MouseEvent) => {
-  isHovered.set(1);
-  mouseX.set(event.pageX);
-};
+  isHovered.set(1)
+  mouseX.set(event.pageX)
+}
 
 const handleMouseLeave = () => {
-  isHovered.set(0);
-  mouseX.set(Infinity);
-};
+  isHovered.set(0)
+  mouseX.set(Infinity)
+}
 </script>
 
 <template>
-  <div :style="{ height: currentHeight + 'px', scrollbarWidth: 'none' }" class="flex items-center mx-2 max-w-full">
+  <div
+    :style="{ height: currentHeight + 'px', scrollbarWidth: 'none' }"
+    class="flex items-center mx-2 max-w-full"
+  >
     <div
       @mousemove="handleMouseMove"
       @mouseleave="handleMouseLeave"
@@ -98,75 +103,75 @@ const DockItem = defineComponent({
   props: {
     className: {
       type: String,
-      default: ''
+      default: '',
     },
     onClick: {
       type: Function,
-      default: () => {}
+      default: () => {},
     },
     mouseX: {
       type: Object as () => ReturnType<typeof useMotionValue<number>>,
-      required: true
+      required: true,
     },
     spring: {
       type: Object as () => SpringOptions,
-      required: true
+      required: true,
     },
     distance: {
       type: Number,
-      required: true
+      required: true,
     },
     baseItemSize: {
       type: Number,
-      required: true
+      required: true,
     },
     magnification: {
       type: Number,
-      required: true
+      required: true,
     },
     item: {
       type: Object as () => DockItemData,
-      required: true
-    }
+      required: true,
+    },
   },
   setup(props) {
-    const itemRef = ref<HTMLDivElement>();
-    const isHovered = useMotionValue(0);
-    const currentSize = ref(props.baseItemSize);
+    const itemRef = ref<HTMLDivElement>()
+    const isHovered = useMotionValue(0)
+    const currentSize = ref(props.baseItemSize)
 
     const mouseDistance = useTransform(props.mouseX, (val: number) => {
       const rect = itemRef.value?.getBoundingClientRect() ?? {
         x: 0,
-        width: props.baseItemSize
-      };
-      return val - rect.x - props.baseItemSize / 2;
-    });
+        width: props.baseItemSize,
+      }
+      return val - rect.x - props.baseItemSize / 2
+    })
 
     const targetSize = useTransform(
       mouseDistance,
       [-props.distance, 0, props.distance],
-      [props.baseItemSize, props.magnification, props.baseItemSize]
-    );
-    const size = useSpring(targetSize, props.spring);
+      [props.baseItemSize, props.magnification, props.baseItemSize],
+    )
+    const size = useSpring(targetSize, props.spring)
 
-    let unsubscribeSize: (() => void) | null = null;
+    let unsubscribeSize: (() => void) | null = null
 
     onMounted(() => {
       unsubscribeSize = size.on('change', (latest: number) => {
-        currentSize.value = latest;
-      });
-    });
+        currentSize.value = latest
+      })
+    })
 
     onUnmounted(() => {
       if (unsubscribeSize) {
-        unsubscribeSize();
+        unsubscribeSize()
       }
-    });
+    })
 
-    const handleHoverStart = () => isHovered.set(1);
-    const handleHoverEnd = () => isHovered.set(0);
-    const handleFocus = () => isHovered.set(1);
-    const handleBlur = () => isHovered.set(0);
+    const handleHoverStart = () => isHovered.set(1)
+    const handleHoverEnd = () => isHovered.set(0)
+    const handleFocus = () => isHovered.set(1)
+    const handleBlur = () => isHovered.set(0)
 
     return {
       itemRef,
@@ -176,12 +181,12 @@ const DockItem = defineComponent({
       handleHoverStart,
       handleHoverEnd,
       handleFocus,
-      handleBlur
-    };
+      handleBlur,
+    }
   },
   render() {
-    const icon = typeof this.item.icon === 'function' ? this.item.icon() : this.item.icon;
-    const label = typeof this.item.label === 'function' ? this.item.label() : this.item.label;
+    const icon = typeof this.item.icon === 'function' ? this.item.icon() : this.item.icon
+    const label = typeof this.item.label === 'function' ? this.item.label() : this.item.label
 
     return h(
       'div',
@@ -189,7 +194,7 @@ const DockItem = defineComponent({
         ref: 'itemRef',
         style: {
           width: this.currentSize + 'px',
-          height: this.currentSize + 'px'
+          height: this.currentSize + 'px',
         },
         onMouseenter: this.handleHoverStart,
         onMouseleave: this.handleHoverEnd,
@@ -199,48 +204,50 @@ const DockItem = defineComponent({
         class: `relative cursor-pointer inline-flex items-center justify-center rounded-full bg-[#111] border-neutral-700 border-2 shadow-md ${this.className}`,
         tabindex: 0,
         role: 'button',
-        'aria-haspopup': 'true'
+        'aria-haspopup': 'true',
       },
       [
         h(DockIcon, {}, () => [icon]),
-        h(DockLabel, { isHovered: this.isHovered }, () => [typeof label === 'string' ? label : label])
-      ]
-    );
-  }
-});
+        h(DockLabel, { isHovered: this.isHovered }, () => [
+          typeof label === 'string' ? label : label,
+        ]),
+      ],
+    )
+  },
+})
 
 const DockLabel = defineComponent({
   name: 'DockLabel',
   props: {
     className: {
       type: String,
-      default: ''
+      default: '',
     },
     isHovered: {
       type: Object as () => ReturnType<typeof useMotionValue<number>>,
-      required: true
-    }
+      required: true,
+    },
   },
   setup(props) {
-    const isVisible = ref(false);
+    const isVisible = ref(false)
 
-    let unsubscribe: (() => void) | null = null;
+    let unsubscribe: (() => void) | null = null
 
     onMounted(() => {
       unsubscribe = props.isHovered.on('change', (latest: number) => {
-        isVisible.value = latest === 1;
-      });
-    });
+        isVisible.value = latest === 1
+      })
+    })
 
     onUnmounted(() => {
       if (unsubscribe) {
-        unsubscribe();
+        unsubscribe()
       }
-    });
+    })
 
     return {
-      isVisible
-    };
+      isVisible,
+    }
   },
   render() {
     return h(
@@ -251,37 +258,37 @@ const DockLabel = defineComponent({
         style: {
           transform: 'translateX(-50%)',
           opacity: this.isVisible ? 1 : 0,
-          visibility: this.isVisible ? 'visible' : 'hidden'
-        }
+          visibility: this.isVisible ? 'visible' : 'hidden',
+        },
       },
-      this.$slots.default?.()
-    );
-  }
-});
+      this.$slots.default?.(),
+    )
+  },
+})
 
 const DockIcon = defineComponent({
   name: 'DockIcon',
   props: {
     className: {
       type: String,
-      default: ''
-    }
+      default: '',
+    },
   },
   render() {
     return h(
       'div',
       {
-        class: `flex items-center justify-center ${this.className}`
+        class: `flex items-center justify-center ${this.className}`,
       },
-      this.$slots.default?.()
-    );
-  }
-});
+      this.$slots.default?.(),
+    )
+  },
+})
 
 export default defineComponent({
   name: 'DockNav',
   components: {
-    DockItem
-  }
-});
+    DockItem,
+  },
+})
 </script>

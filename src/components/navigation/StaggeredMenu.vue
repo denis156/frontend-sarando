@@ -1,7 +1,9 @@
 <template>
   <div class="w-full h-full sm-scope">
     <div
-      :class="(className ? className + ' ' : '') + 'staggered-menu-wrapper relative w-full h-full z-40'"
+      :class="
+        (className ? className + ' ' : '') + 'staggered-menu-wrapper relative w-full h-full z-40'
+      "
       :style="accentColor ? { '--sm-accent': accentColor } : undefined"
       :data-position="position"
       :data-open="open || undefined"
@@ -38,7 +40,11 @@
             aria-hidden="true"
           >
             <span ref="textInnerRef" class="flex flex-col leading-none sm-toggle-textInner">
-              <span v-for="(line, index) in textLines" :key="index" class="block h-[1em] leading-none sm-toggle-line">
+              <span
+                v-for="(line, index) in textLines"
+                :key="index"
+                class="block h-[1em] leading-none sm-toggle-line"
+              >
                 {{ line }}
               </span>
             </span>
@@ -85,17 +91,25 @@
                   :aria-label="item.ariaLabel"
                   :data-index="idx + 1"
                 >
-                  <span class="inline-block will-change-transform sm-panel-itemLabel origin-[50%_100%]">
+                  <span
+                    class="inline-block will-change-transform sm-panel-itemLabel origin-[50%_100%]"
+                  >
                     {{ item.label }}
                   </span>
                 </router-link>
               </li>
             </template>
-            <li v-else class="relative overflow-hidden leading-none sm-panel-itemWrap" aria-hidden="true">
+            <li
+              v-else
+              class="relative overflow-hidden leading-none sm-panel-itemWrap"
+              aria-hidden="true"
+            >
               <span
                 class="inline-block relative pr-[1.4em] font-semibold text-[4rem] text-black no-underline uppercase leading-none tracking-[-2px] transition-[background,color] duration-150 ease-linear cursor-pointer sm-panel-item"
               >
-                <span class="inline-block will-change-transform sm-panel-itemLabel origin-[50%_100%]">
+                <span
+                  class="inline-block will-change-transform sm-panel-itemLabel origin-[50%_100%]"
+                >
                   No items
                 </span>
               </span>
@@ -107,9 +121,18 @@
             class="flex flex-col gap-3 mt-auto pt-8 sm-socials"
             aria-label="Social links"
           >
-            <h3 class="m-0 font-medium text-base sm-socials-title text-(--sm-accent,#ff0000)">Socials</h3>
-            <ul class="flex flex-row flex-wrap items-center gap-4 m-0 p-0 list-none sm-socials-list" role="list">
-              <li v-for="(social, i) in socialItems" :key="social.label + i" class="sm-socials-item">
+            <h3 class="m-0 font-medium text-base sm-socials-title text-(--sm-accent,#ff0000)">
+              Socials
+            </h3>
+            <ul
+              class="flex flex-row flex-wrap items-center gap-4 m-0 p-0 list-none sm-socials-list"
+              role="list"
+            >
+              <li
+                v-for="(social, i) in socialItems"
+                :key="social.label + i"
+                class="sm-socials-item"
+              >
                 <a
                   :href="social.link"
                   target="_blank"
@@ -128,34 +151,34 @@
 </template>
 
 <script setup lang="ts">
-import { gsap } from 'gsap';
-import { computed, nextTick, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { gsap } from 'gsap'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue'
+import { useRoute } from 'vue-router'
 
 export interface StaggeredMenuItem {
-  label: string;
-  ariaLabel: string;
-  link: string;
+  label: string
+  ariaLabel: string
+  link: string
 }
 export interface StaggeredMenuSocialItem {
-  label: string;
-  link: string;
+  label: string
+  link: string
 }
 export interface StaggeredMenuProps {
-  position?: 'left' | 'right';
-  colors?: string[];
-  items?: StaggeredMenuItem[];
-  socialItems?: StaggeredMenuSocialItem[];
-  displaySocials?: boolean;
-  displayItemNumbering?: boolean;
-  className?: string;
-  logoUrl?: string;
-  menuButtonColor?: string;
-  openMenuButtonColor?: string;
-  accentColor?: string;
-  changeMenuColorOnOpen?: boolean;
-  onMenuOpen?: () => void;
-  onMenuClose?: () => void;
+  position?: 'left' | 'right'
+  colors?: string[]
+  items?: StaggeredMenuItem[]
+  socialItems?: StaggeredMenuSocialItem[]
+  displaySocials?: boolean
+  displayItemNumbering?: boolean
+  className?: string
+  logoUrl?: string
+  menuButtonColor?: string
+  openMenuButtonColor?: string
+  accentColor?: string
+  changeMenuColorOnOpen?: boolean
+  onMenuOpen?: () => void
+  onMenuClose?: () => void
 }
 
 const props = withDefaults(defineProps<StaggeredMenuProps>(), {
@@ -169,135 +192,151 @@ const props = withDefaults(defineProps<StaggeredMenuProps>(), {
   menuButtonColor: '#fff',
   openMenuButtonColor: '#fff',
   changeMenuColorOnOpen: true,
-  accentColor: '#27FF64'
-});
+  accentColor: '#27FF64',
+})
 
 // Auto close menu on route change
-const route = useRoute();
+const route = useRoute()
 
-const open = ref(false);
-const openRef = ref(false);
+const open = ref(false)
+const openRef = ref(false)
 
-const panelRef = useTemplateRef('panelRef');
-const preLayersRef = useTemplateRef('preLayersRef');
-const preLayerElsRef = ref<HTMLElement[]>([]);
+const panelRef = useTemplateRef('panelRef')
+const preLayersRef = useTemplateRef('preLayersRef')
+const preLayerElsRef = ref<HTMLElement[]>([])
 
-const plusHRef = useTemplateRef('plusHRef');
-const plusVRef = useTemplateRef('plusVRef');
-const iconRef = useTemplateRef('iconRef');
+const plusHRef = useTemplateRef('plusHRef')
+const plusVRef = useTemplateRef('plusVRef')
+const iconRef = useTemplateRef('iconRef')
 
-const textInnerRef = useTemplateRef('textInnerRef');
-const textWrapRef = useTemplateRef('textWrapRef');
-const textLines = ref<string[]>(['Menu', 'Tutup']);
+const textInnerRef = useTemplateRef('textInnerRef')
+const textWrapRef = useTemplateRef('textWrapRef')
+const textLines = ref<string[]>(['Menu', 'Tutup'])
 
-const openTlRef = ref<gsap.core.Timeline | null>(null);
-const closeTweenRef = ref<gsap.core.Tween | null>(null);
-const spinTweenRef = ref<gsap.core.Timeline | null>(null);
-const textCycleAnimRef = ref<gsap.core.Tween | null>(null);
-const colorTweenRef = ref<gsap.core.Tween | null>(null);
+const openTlRef = ref<gsap.core.Timeline | null>(null)
+const closeTweenRef = ref<gsap.core.Tween | null>(null)
+const spinTweenRef = ref<gsap.core.Timeline | null>(null)
+const textCycleAnimRef = ref<gsap.core.Tween | null>(null)
+const colorTweenRef = ref<gsap.core.Tween | null>(null)
 
-const toggleBtnRef = useTemplateRef('toggleBtnRef');
-const busyRef = ref(false);
+const toggleBtnRef = useTemplateRef('toggleBtnRef')
+const busyRef = ref(false)
 
-const itemEntranceTweenRef = ref<gsap.core.Tween | null>(null);
+const itemEntranceTweenRef = ref<gsap.core.Tween | null>(null)
 
 const processedColors = computed(() => {
-  const raw = props.colors && props.colors.length ? props.colors.slice(0, 4) : ['#20251F', '#353F37'];
-  const arr = [...raw];
+  const raw =
+    props.colors && props.colors.length ? props.colors.slice(0, 4) : ['#20251F', '#353F37']
+  const arr = [...raw]
   if (arr.length >= 3) {
-    const mid = Math.floor(arr.length / 2);
-    arr.splice(mid, 1);
+    const mid = Math.floor(arr.length / 2)
+    arr.splice(mid, 1)
   }
-  return arr;
-});
+  return arr
+})
 
-let gsapContext: gsap.Context | null = null;
+let gsapContext: gsap.Context | null = null
 
 const initializeGSAP = () => {
   gsapContext = gsap.context(() => {
-    const panel = panelRef.value;
-    const preContainer = preLayersRef.value;
-    const plusH = plusHRef.value;
-    const plusV = plusVRef.value;
-    const icon = iconRef.value;
-    const textInner = textInnerRef.value;
+    const panel = panelRef.value
+    const preContainer = preLayersRef.value
+    const plusH = plusHRef.value
+    const plusV = plusVRef.value
+    const icon = iconRef.value
+    const textInner = textInnerRef.value
 
-    if (!panel || !plusH || !plusV || !icon || !textInner) return;
+    if (!panel || !plusH || !plusV || !icon || !textInner) return
 
-    let preLayers: HTMLElement[] = [];
+    let preLayers: HTMLElement[] = []
     if (preContainer) {
-      preLayers = Array.from(preContainer.querySelectorAll('.sm-prelayer')) as HTMLElement[];
+      preLayers = Array.from(preContainer.querySelectorAll('.sm-prelayer')) as HTMLElement[]
     }
-    preLayerElsRef.value = preLayers;
+    preLayerElsRef.value = preLayers
 
-    const offscreen = props.position === 'left' ? -100 : 100;
-    gsap.set([panel, ...preLayers], { xPercent: offscreen });
+    const offscreen = props.position === 'left' ? -100 : 100
+    gsap.set([panel, ...preLayers], { xPercent: offscreen })
 
-    gsap.set(plusH, { transformOrigin: '50% 50%', rotate: 0 });
-    gsap.set(plusV, { transformOrigin: '50% 50%', rotate: 90 });
-    gsap.set(icon, { rotate: 0, transformOrigin: '50% 50%' });
+    gsap.set(plusH, { transformOrigin: '50% 50%', rotate: 0 })
+    gsap.set(plusV, { transformOrigin: '50% 50%', rotate: 90 })
+    gsap.set(icon, { rotate: 0, transformOrigin: '50% 50%' })
 
-    gsap.set(textInner, { yPercent: 0 });
+    gsap.set(textInner, { yPercent: 0 })
 
     if (toggleBtnRef.value) {
-      gsap.set(toggleBtnRef.value, { color: props.menuButtonColor });
+      gsap.set(toggleBtnRef.value, { color: props.menuButtonColor })
     }
-  });
-};
+  })
+}
 
 const buildOpenTimeline = (): gsap.core.Timeline | null => {
-  const panel = panelRef.value;
-  const layers = preLayerElsRef.value;
-  if (!panel) return null;
+  const panel = panelRef.value
+  const layers = preLayerElsRef.value
+  if (!panel) return null
 
-  openTlRef.value?.kill();
+  openTlRef.value?.kill()
   if (closeTweenRef.value) {
-    closeTweenRef.value.kill();
-    closeTweenRef.value = null;
+    closeTweenRef.value.kill()
+    closeTweenRef.value = null
   }
-  itemEntranceTweenRef.value?.kill();
+  itemEntranceTweenRef.value?.kill()
 
-  const itemEls = Array.from(panel.querySelectorAll('.sm-panel-itemLabel')) as HTMLElement[];
+  const itemEls = Array.from(panel.querySelectorAll('.sm-panel-itemLabel')) as HTMLElement[]
   const numberEls = Array.from(
-    panel.querySelectorAll('.sm-panel-list[data-numbering] .sm-panel-item')
-  ) as HTMLElement[];
-  const socialTitle = panel.querySelector('.sm-socials-title') as HTMLElement | null;
-  const socialLinks = Array.from(panel.querySelectorAll('.sm-socials-link')) as HTMLElement[];
+    panel.querySelectorAll('.sm-panel-list[data-numbering] .sm-panel-item'),
+  ) as HTMLElement[]
+  const socialTitle = panel.querySelector('.sm-socials-title') as HTMLElement | null
+  const socialLinks = Array.from(panel.querySelectorAll('.sm-socials-link')) as HTMLElement[]
 
-  const layerStates = layers.map((el: HTMLElement) => ({ el, start: Number(gsap.getProperty(el, 'xPercent')) }));
-  const panelStart = Number(gsap.getProperty(panel, 'xPercent'));
+  const layerStates = layers.map((el: HTMLElement) => ({
+    el,
+    start: Number(gsap.getProperty(el, 'xPercent')),
+  }))
+  const panelStart = Number(gsap.getProperty(panel, 'xPercent'))
 
-  if (itemEls.length) gsap.set(itemEls, { yPercent: 140, rotate: 10 });
-  if (numberEls.length) gsap.set(numberEls, { ['--sm-num-opacity' as keyof Record<string, number>]: 0 });
-  if (socialTitle) gsap.set(socialTitle, { opacity: 0 });
-  if (socialLinks.length) gsap.set(socialLinks, { y: 25, opacity: 0 });
+  if (itemEls.length) gsap.set(itemEls, { yPercent: 140, rotate: 10 })
+  if (numberEls.length)
+    gsap.set(numberEls, { ['--sm-num-opacity' as keyof Record<string, number>]: 0 })
+  if (socialTitle) gsap.set(socialTitle, { opacity: 0 })
+  if (socialLinks.length) gsap.set(socialLinks, { y: 25, opacity: 0 })
 
-  const tl = gsap.timeline({ paused: true });
+  const tl = gsap.timeline({ paused: true })
 
   layerStates.forEach((ls: { el: HTMLElement; start: number }, i: number) => {
-    tl.fromTo(ls.el, { xPercent: ls.start }, { xPercent: 0, duration: 0.5, ease: 'power4.out' }, i * 0.07);
-  });
+    tl.fromTo(
+      ls.el,
+      { xPercent: ls.start },
+      { xPercent: 0, duration: 0.5, ease: 'power4.out' },
+      i * 0.07,
+    )
+  })
 
-  const lastTime = layerStates.length ? (layerStates.length - 1) * 0.07 : 0;
-  const panelInsertTime = lastTime + (layerStates.length ? 0.08 : 0);
-  const panelDuration = 0.65;
+  const lastTime = layerStates.length ? (layerStates.length - 1) * 0.07 : 0
+  const panelInsertTime = lastTime + (layerStates.length ? 0.08 : 0)
+  const panelDuration = 0.65
 
   tl.fromTo(
     panel,
     { xPercent: panelStart },
     { xPercent: 0, duration: panelDuration, ease: 'power4.out' },
-    panelInsertTime
-  );
+    panelInsertTime,
+  )
 
   if (itemEls.length) {
-    const itemsStartRatio = 0.15;
-    const itemsStart = panelInsertTime + panelDuration * itemsStartRatio;
+    const itemsStartRatio = 0.15
+    const itemsStart = panelInsertTime + panelDuration * itemsStartRatio
 
     tl.to(
       itemEls,
-      { yPercent: 0, rotate: 0, duration: 1, ease: 'power4.out', stagger: { each: 0.1, from: 'start' } },
-      itemsStart
-    );
+      {
+        yPercent: 0,
+        rotate: 0,
+        duration: 1,
+        ease: 'power4.out',
+        stagger: { each: 0.1, from: 'start' },
+      },
+      itemsStart,
+    )
 
     if (numberEls.length) {
       tl.to(
@@ -306,17 +345,18 @@ const buildOpenTimeline = (): gsap.core.Timeline | null => {
           duration: 0.6,
           ease: 'power2.out',
           ['--sm-num-opacity' as keyof Record<string, number>]: 1,
-          stagger: { each: 0.08, from: 'start' }
+          stagger: { each: 0.08, from: 'start' },
         },
-        itemsStart + 0.1
-      );
+        itemsStart + 0.1,
+      )
     }
   }
 
   if (socialTitle || socialLinks.length) {
-    const socialsStart = panelInsertTime + panelDuration * 0.4;
+    const socialsStart = panelInsertTime + panelDuration * 0.4
 
-    if (socialTitle) tl.to(socialTitle, { opacity: 1, duration: 0.5, ease: 'power2.out' }, socialsStart);
+    if (socialTitle)
+      tl.to(socialTitle, { opacity: 1, duration: 0.5, ease: 'power2.out' }, socialsStart)
     if (socialLinks.length) {
       tl.to(
         socialLinks,
@@ -327,45 +367,45 @@ const buildOpenTimeline = (): gsap.core.Timeline | null => {
           ease: 'power3.out',
           stagger: { each: 0.08, from: 'start' },
           onComplete: () => {
-            gsap.set(socialLinks, { clearProps: 'opacity' });
-          }
+            gsap.set(socialLinks, { clearProps: 'opacity' })
+          },
         },
-        socialsStart + 0.04
-      );
+        socialsStart + 0.04,
+      )
     }
   }
 
-  openTlRef.value = tl;
-  return tl;
-};
+  openTlRef.value = tl
+  return tl
+}
 
 const playOpen = () => {
-  if (busyRef.value) return;
-  busyRef.value = true;
-  const tl = buildOpenTimeline();
+  if (busyRef.value) return
+  busyRef.value = true
+  const tl = buildOpenTimeline()
   if (tl) {
     tl.eventCallback('onComplete', () => {
-      busyRef.value = false;
-    });
-    tl.play(0);
+      busyRef.value = false
+    })
+    tl.play(0)
   } else {
-    busyRef.value = false;
+    busyRef.value = false
   }
-};
+}
 
 const playClose = () => {
-  openTlRef.value?.kill();
-  openTlRef.value = null;
-  itemEntranceTweenRef.value?.kill();
+  openTlRef.value?.kill()
+  openTlRef.value = null
+  itemEntranceTweenRef.value?.kill()
 
-  const panel = panelRef.value;
-  const layers = preLayerElsRef.value;
-  if (!panel) return;
+  const panel = panelRef.value
+  const layers = preLayerElsRef.value
+  if (!panel) return
 
-  const all: HTMLElement[] = [...layers, panel];
-  closeTweenRef.value?.kill();
+  const all: HTMLElement[] = [...layers, panel]
+  closeTweenRef.value?.kill()
 
-  const offscreen = props.position === 'left' ? -100 : 100;
+  const offscreen = props.position === 'left' ? -100 : 100
 
   closeTweenRef.value = gsap.to(all, {
     xPercent: offscreen,
@@ -373,168 +413,174 @@ const playClose = () => {
     ease: 'power3.in',
     overwrite: 'auto',
     onComplete: () => {
-      const itemEls = Array.from(panel.querySelectorAll('.sm-panel-itemLabel')) as HTMLElement[];
-      if (itemEls.length) gsap.set(itemEls, { yPercent: 140, rotate: 10 });
+      const itemEls = Array.from(panel.querySelectorAll('.sm-panel-itemLabel')) as HTMLElement[]
+      if (itemEls.length) gsap.set(itemEls, { yPercent: 140, rotate: 10 })
 
       const numberEls = Array.from(
-        panel.querySelectorAll('.sm-panel-list[data-numbering] .sm-panel-item')
-      ) as HTMLElement[];
-      if (numberEls.length) gsap.set(numberEls, { ['--sm-num-opacity' as keyof Record<string, number>]: 0 });
+        panel.querySelectorAll('.sm-panel-list[data-numbering] .sm-panel-item'),
+      ) as HTMLElement[]
+      if (numberEls.length)
+        gsap.set(numberEls, { ['--sm-num-opacity' as keyof Record<string, number>]: 0 })
 
-      const socialTitle = panel.querySelector('.sm-socials-title') as HTMLElement | null;
-      const socialLinks = Array.from(panel.querySelectorAll('.sm-socials-link')) as HTMLElement[];
-      if (socialTitle) gsap.set(socialTitle, { opacity: 0 });
-      if (socialLinks.length) gsap.set(socialLinks, { y: 25, opacity: 0 });
+      const socialTitle = panel.querySelector('.sm-socials-title') as HTMLElement | null
+      const socialLinks = Array.from(panel.querySelectorAll('.sm-socials-link')) as HTMLElement[]
+      if (socialTitle) gsap.set(socialTitle, { opacity: 0 })
+      if (socialLinks.length) gsap.set(socialLinks, { y: 25, opacity: 0 })
 
-      busyRef.value = false;
-    }
-  });
-};
+      busyRef.value = false
+    },
+  })
+}
 
 const animateIcon = (opening: boolean) => {
-  const icon = iconRef.value;
-  const h = plusHRef.value;
-  const v = plusVRef.value;
-  if (!icon || !h || !v) return;
+  const icon = iconRef.value
+  const h = plusHRef.value
+  const v = plusVRef.value
+  if (!icon || !h || !v) return
 
-  spinTweenRef.value?.kill();
+  spinTweenRef.value?.kill()
 
   if (opening) {
-    gsap.set(icon, { rotate: 0, transformOrigin: '50% 50%' });
+    gsap.set(icon, { rotate: 0, transformOrigin: '50% 50%' })
     spinTweenRef.value = gsap
       .timeline({ defaults: { ease: 'power4.out' } })
       .to(h, { rotate: 45, duration: 0.5 }, 0)
-      .to(v, { rotate: -45, duration: 0.5 }, 0);
+      .to(v, { rotate: -45, duration: 0.5 }, 0)
   } else {
     spinTweenRef.value = gsap
       .timeline({ defaults: { ease: 'power3.inOut' } })
       .to(h, { rotate: 0, duration: 0.35 }, 0)
       .to(v, { rotate: 90, duration: 0.35 }, 0)
-      .to(icon, { rotate: 0, duration: 0.001 }, 0);
+      .to(icon, { rotate: 0, duration: 0.001 }, 0)
   }
-};
+}
 
 const animateColor = (opening: boolean) => {
-  const btn = toggleBtnRef.value;
-  if (!btn) return;
-  colorTweenRef.value?.kill();
+  const btn = toggleBtnRef.value
+  if (!btn) return
+  colorTweenRef.value?.kill()
   if (props.changeMenuColorOnOpen) {
-    const targetColor = opening ? props.openMenuButtonColor : props.menuButtonColor;
-    colorTweenRef.value = gsap.to(btn, { color: targetColor, delay: 0.18, duration: 0.3, ease: 'power2.out' });
+    const targetColor = opening ? props.openMenuButtonColor : props.menuButtonColor
+    colorTweenRef.value = gsap.to(btn, {
+      color: targetColor,
+      delay: 0.18,
+      duration: 0.3,
+      ease: 'power2.out',
+    })
   } else {
-    gsap.set(btn, { color: props.menuButtonColor });
+    gsap.set(btn, { color: props.menuButtonColor })
   }
-};
+}
 
 const animateText = (opening: boolean) => {
-  const inner = textInnerRef.value;
-  if (!inner) return;
+  const inner = textInnerRef.value
+  if (!inner) return
 
-  textCycleAnimRef.value?.kill();
+  textCycleAnimRef.value?.kill()
 
-  const valueLabel = opening ? 'Menu' : 'Tutup';
-  const targetLabel = opening ? 'Tutup' : 'Menu';
-  const cycles = 3;
+  const valueLabel = opening ? 'Menu' : 'Tutup'
+  const targetLabel = opening ? 'Tutup' : 'Menu'
+  const cycles = 3
 
-  const seq: string[] = [valueLabel];
-  let last = valueLabel;
+  const seq: string[] = [valueLabel]
+  let last = valueLabel
   for (let i = 0; i < cycles; i++) {
-    last = last === 'Menu' ? 'Tutup' : 'Menu';
-    seq.push(last);
+    last = last === 'Menu' ? 'Tutup' : 'Menu'
+    seq.push(last)
   }
-  if (last !== targetLabel) seq.push(targetLabel);
-  seq.push(targetLabel);
+  if (last !== targetLabel) seq.push(targetLabel)
+  seq.push(targetLabel)
 
-  textLines.value = seq;
-  gsap.set(inner, { yPercent: 0 });
+  textLines.value = seq
+  gsap.set(inner, { yPercent: 0 })
 
-  const lineCount = seq.length;
-  const finalShift = ((lineCount - 1) / lineCount) * 100;
+  const lineCount = seq.length
+  const finalShift = ((lineCount - 1) / lineCount) * 100
 
   textCycleAnimRef.value = gsap.to(inner, {
     yPercent: -finalShift,
     duration: 0.5 + lineCount * 0.07,
-    ease: 'power4.out'
-  });
-};
+    ease: 'power4.out',
+  })
+}
 
 const toggleMenu = () => {
-  const target = !openRef.value;
-  openRef.value = target;
-  open.value = target;
+  const target = !openRef.value
+  openRef.value = target
+  open.value = target
 
   if (target) {
-    props.onMenuOpen?.();
-    playOpen();
+    props.onMenuOpen?.()
+    playOpen()
   } else {
-    props.onMenuClose?.();
-    playClose();
+    props.onMenuClose?.()
+    playClose()
   }
 
-  animateIcon(target);
-  animateColor(target);
-  animateText(target);
-};
+  animateIcon(target)
+  animateColor(target)
+  animateText(target)
+}
 
 watch(
   () => [props.changeMenuColorOnOpen, props.menuButtonColor, props.openMenuButtonColor],
   () => {
     if (toggleBtnRef.value) {
       if (props.changeMenuColorOnOpen) {
-        const targetColor = openRef.value ? props.openMenuButtonColor : props.menuButtonColor;
-        gsap.set(toggleBtnRef.value, { color: targetColor });
+        const targetColor = openRef.value ? props.openMenuButtonColor : props.menuButtonColor
+        gsap.set(toggleBtnRef.value, { color: targetColor })
       } else {
-        gsap.set(toggleBtnRef.value, { color: props.menuButtonColor });
+        gsap.set(toggleBtnRef.value, { color: props.menuButtonColor })
       }
     }
-  }
-);
+  },
+)
 
 watch(
   () => [props.menuButtonColor, props.position],
   () => {
     nextTick(() => {
       if (gsapContext) {
-        gsapContext.revert();
+        gsapContext.revert()
       }
-      initializeGSAP();
-    });
-  }
-);
+      initializeGSAP()
+    })
+  },
+)
 
 // Close menu when route changes
 watch(
   () => route.path,
   () => {
     if (openRef.value) {
-      openRef.value = false;
-      open.value = false;
-      playClose();
-      animateIcon(false);
-      animateColor(false);
-      animateText(false);
+      openRef.value = false
+      open.value = false
+      playClose()
+      animateIcon(false)
+      animateColor(false)
+      animateText(false)
     }
-  }
-);
+  },
+)
 
 onMounted(() => {
   nextTick(() => {
-    initializeGSAP();
-  });
-});
+    initializeGSAP()
+  })
+})
 
 onBeforeUnmount(() => {
-  openTlRef.value?.kill();
-  closeTweenRef.value?.kill();
-  spinTweenRef.value?.kill();
-  textCycleAnimRef.value?.kill();
-  colorTweenRef.value?.kill();
-  itemEntranceTweenRef.value?.kill();
+  openTlRef.value?.kill()
+  closeTweenRef.value?.kill()
+  spinTweenRef.value?.kill()
+  textCycleAnimRef.value?.kill()
+  colorTweenRef.value?.kill()
+  itemEntranceTweenRef.value?.kill()
 
   if (gsapContext) {
-    gsapContext.revert();
+    gsapContext.revert()
   }
-});
+})
 </script>
 
 <style scoped>
