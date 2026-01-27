@@ -892,6 +892,14 @@ onBeforeUnmount(() => {
     left: 0;
     right: 0;
   }
+  .sm-scope .sm-panel-item {
+    font-size: 3.2rem;
+    letter-spacing: -1.5px;
+  }
+  .sm-scope .sm-panel-list[data-numbering] .sm-panel-item::after {
+    font-size: 16px;
+    right: 2.5em;
+  }
   .sm-scope .staggered-menu-wrapper[data-open] .sm-logo-img {
     filter: invert(100%);
   }
