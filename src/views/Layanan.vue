@@ -33,11 +33,11 @@
           :skew-amount="4"
           easing="elastic"
           :pause-on-hover="false"
-          :items="popularServices"
+          :items="cardItems(featuredServices)"
           @card-click="handleCardClick"
         >
           <template
-            v-for="(service, index) in popularServices"
+            v-for="(service, index) in cardItems(featuredServices)"
             :key="service.id"
             #[`card-${index}`]="{ item }"
           >
@@ -49,7 +49,7 @@
                 class="absolute inset-0 w-full h-full object-cover"
               />
               <!-- Overlay -->
-              <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-transparent"></div>
+              <div class="absolute inset-0 bg-linear-to-b from-black/80 via-black/40 to-transparent"></div>
               <!-- Content -->
               <div class="absolute top-0 left-0 right-0 p-3">
                 <div class="flex items-center">
@@ -104,11 +104,11 @@
               :skew-amount="6"
               easing="elastic"
               :pause-on-hover="false"
-              :items="popularServices"
+              :items="cardItems(featuredServices)"
               @card-click="handleCardClick"
             >
               <template
-                v-for="(service, index) in popularServices"
+                v-for="(service, index) in cardItems(featuredServices)"
                 :key="service.id"
                 #[`card-${index}`]="{ item }"
               >
@@ -120,7 +120,7 @@
                     class="absolute inset-0 w-full h-full object-cover"
                   />
                   <!-- Overlay -->
-                  <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-transparent"></div>
+                  <div class="absolute inset-0 bg-linear-to-b from-black/80 via-black/40 to-transparent"></div>
                   <!-- Content -->
                   <div class="absolute top-0 left-0 right-0 p-6">
                     <div class="flex items-center">
@@ -146,18 +146,35 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { ref, onMounted } from 'vue'
 import { Motion } from 'motion-v'
 import * as LucideIcons from 'lucide-vue-next'
 import CardSwap from '@/components/ui/CardSwap.vue'
 import Noise from '@/components/ui/background/Noise.vue'
 import LightRays from '@/components/ui/background/LightRays.vue'
-import { SERVICES } from '@/constants/services'
+import { getFeaturedServices } from '@/api/services'
+import type { Service } from '@/types/service'
 
-// Filter hanya layanan populer untuk CardSwap
-const popularServices = computed(() => {
-  return SERVICES.filter(service => service.isPopular)
+const featuredServices = ref<Service[]>([])
+
+onMounted(async () => {
+  try {
+    featuredServices.value = await getFeaturedServices()
+  } catch (error) {
+    console.error('Failed to fetch featured services:', error)
+  }
 })
+
+// Map API data ke format CardSwap
+const cardItems = (services: Service[]) => {
+  return services.map((service) => ({
+    id: service.id,
+    title: service.name,
+    image: service.image_path,
+    icon: service.icon ?? 'Box',
+    slug: service.slug,
+  }))
+}
 
 // Helper untuk get icon component dari lucide
 const getIcon = (iconName: string) => {
@@ -166,9 +183,9 @@ const getIcon = (iconName: string) => {
 
 // Handle card click
 const handleCardClick = (index: number) => {
-  const service = popularServices.value[index]
+  const service = featuredServices.value[index]
   if (service) {
-    console.log(`Card ${index} (${service.title}) clicked`)
+    console.log(`Card ${index} (${service.name}) clicked`)
   }
 }
 </script>
