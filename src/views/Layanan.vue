@@ -133,57 +133,174 @@
     </section>
 
     <!-- List Layanan Section -->
-    <section class="relative py-20 bg-primary z-20">
-      <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
-        <div v-for="service in services" :key="service.id" class="mb-20 last:mb-0">
-          <!-- Kategori Badge -->
-          <div v-if="service.category_name" class="flex justify-center mb-3">
-            <Badge class="bg-secondary text-secondary-foreground">
-              {{ service.category_name }}
-            </Badge>
-          </div>
+    <section class="relative z-20">
+      <div
+        v-for="(service, serviceIndex) in services"
+        :key="service.id"
+        :class="serviceIndex % 2 === 0 ? 'bg-accent' : 'bg-primary'"
+        class="py-20"
+      >
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+          <!-- Header: selang-seling teks & gambar -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center mb-10">
+            <!-- Teks - Badge, Nama, Deskripsi -->
+            <div
+              class="text-center lg:text-left"
+              :class="serviceIndex % 2 !== 0 ? 'lg:order-last lg:text-right' : ''"
+            >
+              <motion.div
+                v-if="service.category_name"
+                class="mb-3 flex justify-center"
+                :class="serviceIndex % 2 !== 0 ? 'lg:justify-end' : 'lg:justify-start'"
+                :initial="{ opacity: 0, x: serviceIndex % 2 !== 0 ? 30 : -30 }"
+                :whileInView="{ opacity: 1, x: 0 }"
+                :transition="{ duration: 0.5, ease: 'easeOut' }"
+                :inViewOptions="{ amount: 0.5 }"
+              >
+                <Badge class="bg-secondary text-secondary-foreground">
+                  {{ service.category_name }}
+                </Badge>
+              </motion.div>
 
-          <!-- Nama Layanan -->
-          <div class="flex items-center justify-center gap-3 mb-4">
-            <component :is="getIcon(service.icon ?? 'Box')" class="w-8 h-8 text-tertiary" />
-            <h1 class="text-3xl sm:text-4xl font-bold text-secondary">{{ service.name }}</h1>
-          </div>
+              <motion.div
+                class="flex items-center justify-center gap-3 mb-4"
+                :class="serviceIndex % 2 !== 0 ? 'lg:justify-end' : 'lg:justify-start'"
+                :initial="{ opacity: 0, x: serviceIndex % 2 !== 0 ? 30 : -30 }"
+                :whileInView="{ opacity: 1, x: 0 }"
+                :transition="{ duration: 0.6, delay: 0.1, ease: 'easeOut' }"
+                :inViewOptions="{ amount: 0.5 }"
+              >
+                <component :is="getIcon(service.icon ?? 'Box')" class="w-8 h-8 text-tertiary" />
+                <h1 class="text-3xl sm:text-4xl font-bold text-secondary">{{ service.name }}</h1>
+              </motion.div>
 
-          <p v-if="service.description" class="text-white/50 text-lg mb-10 max-w-2xl mx-auto text-center">
-            {{ service.description }}
-          </p>
+              <motion.p
+                v-if="service.description"
+                class="text-white/50 text-lg"
+                :initial="{ opacity: 0, x: serviceIndex % 2 !== 0 ? 30 : -30 }"
+                :whileInView="{ opacity: 1, x: 0 }"
+                :transition="{ duration: 0.6, delay: 0.2, ease: 'easeOut' }"
+                :inViewOptions="{ amount: 0.5 }"
+              >
+                {{ service.description }}
+              </motion.p>
+            </div>
+
+            <!-- Gambar Layanan -->
+            <motion.div
+              v-if="service.image_path"
+              class="overflow-hidden rounded-xl"
+              :initial="{ opacity: 0, x: serviceIndex % 2 !== 0 ? -30 : 30 }"
+              :whileInView="{ opacity: 1, x: 0 }"
+              :transition="{ duration: 0.7, ease: 'easeOut' }"
+              :inViewOptions="{ amount: 0.3 }"
+            >
+              <img
+                :src="service.image_path"
+                :alt="service.name"
+                class="w-full h-auto object-cover rounded-xl border-2 border-secondary"
+              />
+            </motion.div>
+          </div>
 
           <!-- Card Paket -->
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Card
-              v-for="price in service.prices"
+            <motion.div
+              v-for="(price, priceIndex) in service.prices"
               :key="price.id"
-              class="bg-accent border-tertiary/20 text-white"
+              :initial="{ opacity: 0, y: 40, scale: 0.95 }"
+              :whileInView="{ opacity: 1, y: 0, scale: 1 }"
+              :transition="{ duration: 0.5, delay: priceIndex * 0.15, ease: 'easeOut' }"
+              :inViewOptions="{ amount: 0.2 }"
             >
-              <CardHeader>
-                <CardTitle class="text-xl text-secondary">{{ price.package_name }}</CardTitle>
-                <CardDescription class="text-white/50">{{ price.description }}</CardDescription>
-              </CardHeader>
+              <Card
+                :class="serviceIndex % 2 === 0 ? 'bg-primary border-tertiary/20' : 'bg-accent border-tertiary/20'"
+                class="text-white h-full"
+              >
+                <CardHeader>
+                  <CardTitle class="text-xl text-secondary">{{ price.package_name }}</CardTitle>
+                  <CardDescription class="text-white/50">{{ price.description }}</CardDescription>
+                </CardHeader>
 
-              <CardContent>
-                <p class="text-3xl font-bold text-tertiary mb-6">
-                  {{ formatPrice(price.price) }}
-                </p>
+                <CardContent>
+                  <p class="text-3xl font-bold text-tertiary mb-6">
+                    {{ formatPrice(price.price) }}
+                  </p>
 
-                <ul v-if="price.features?.length" class="space-y-3">
-                  <li
-                    v-for="(feature, index) in price.features"
-                    :key="index"
-                    class="flex items-start gap-2 text-white/70"
-                  >
-                    <BadgeCheck class="w-5 h-5 text-tertiary shrink-0 mt-0.5" />
-                    <span>{{ feature }}</span>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
+                  <ul v-if="price.features?.length" class="space-y-3">
+                    <li
+                      v-for="(feature, index) in price.features"
+                      :key="index"
+                      class="flex items-start gap-2 text-white/70"
+                    >
+                      <BadgeCheck class="w-5 h-5 text-tertiary shrink-0 mt-0.5" />
+                      <span>{{ feature }}</span>
+                    </li>
+                  </ul>
+                </CardContent>
+              </Card>
+            </motion.div>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="relative py-24 bg-accent overflow-hidden z-20">
+      <!-- Noise Background -->
+      <Noise :pattern-alpha="15" mix-blend-mode="overlay" />
+
+      <!-- Light Rays Background -->
+      <div class="absolute inset-0 w-full h-full">
+        <LightRays
+          rays-origin="top-center"
+          rays-color="#f4e4ba"
+          :rays-speed="1.5"
+          :light-spread="1"
+          :ray-length="1.2"
+          :follow-mouse="true"
+          :mouse-influence="1"
+          :noise-amount="0.1"
+          :distortion="0.05"
+        />
+      </div>
+
+      <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <motion.div
+          :initial="{ opacity: 0, y: 30 }"
+          :whileInView="{ opacity: 1, y: 0 }"
+          :transition="{ duration: 0.6, ease: 'easeOut' }"
+          :inViewOptions="{ amount: 0.5 }"
+        >
+          <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-secondary mb-4">
+            Siap Memulai Proyek Anda?
+          </h2>
+        </motion.div>
+
+        <motion.p
+          class="text-lg sm:text-xl text-white/70 max-w-2xl mx-auto mb-10"
+          :initial="{ opacity: 0, y: 20 }"
+          :whileInView="{ opacity: 1, y: 0 }"
+          :transition="{ duration: 0.6, delay: 0.15, ease: 'easeOut' }"
+          :inViewOptions="{ amount: 0.5 }"
+        >
+          Lihat hasil karya kami atau langsung hubungi tim kami untuk konsultasi gratis.
+        </motion.p>
+
+        <motion.div
+          class="flex flex-col sm:flex-row gap-4 justify-center items-center"
+          :initial="{ opacity: 0, y: 20 }"
+          :whileInView="{ opacity: 1, y: 0 }"
+          :transition="{ duration: 0.6, delay: 0.3, ease: 'easeOut' }"
+          :inViewOptions="{ amount: 0.5 }"
+        >
+          <Button as-child size="lg">
+            <RouterLink to="/proyek">Jelajahi Proyek</RouterLink>
+          </Button>
+          <Button as-child size="lg" variant="outline" >
+            <RouterLink to="/kontak">Hubungi Kami</RouterLink>
+          </Button>
+        </motion.div>
       </div>
     </section>
   </main>
@@ -191,9 +308,11 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { Motion } from 'motion-v'
+import { Motion, motion } from 'motion-v'
+import { RouterLink } from 'vue-router'
 import * as LucideIcons from 'lucide-vue-next'
 import { BadgeCheck } from 'lucide-vue-next'
+import { Button } from '@/components/ui/button'
 import CardSwap from '@/components/ui/CardSwap.vue'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
