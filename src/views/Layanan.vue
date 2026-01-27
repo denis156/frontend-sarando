@@ -1,5 +1,5 @@
 <template>
-  <main class="relative min-h-dvh">
+  <main class="relative min-h-dvh bg-foreground">
     <!-- Hero Section - 2 Grid Columns -->
     <section
       class="relative min-h-dvh flex items-start lg:items-center justify-center pt-20 pb-20 bg-accent overflow-hidden"
@@ -132,10 +132,58 @@
       </div>
     </section>
 
-    <!-- List Layanan Section - Nanti dibuat -->
-    <section class="relative py-20 h-dvh bg-primary z-20">
+    <!-- List Layanan Section -->
+    <section class="relative py-20 bg-primary z-20">
       <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
-        <!-- Card layanan akan ditambahkan di sini -->
+        <div v-for="service in services" :key="service.id" class="mb-20 last:mb-0">
+          <!-- Kategori Badge -->
+          <div v-if="service.category_name" class="flex justify-center mb-3">
+            <Badge class="bg-secondary text-secondary-foreground">
+              {{ service.category_name }}
+            </Badge>
+          </div>
+
+          <!-- Nama Layanan -->
+          <div class="flex items-center justify-center gap-3 mb-4">
+            <component :is="getIcon(service.icon ?? 'Box')" class="w-8 h-8 text-tertiary" />
+            <h1 class="text-3xl sm:text-4xl font-bold text-secondary">{{ service.name }}</h1>
+          </div>
+
+          <p v-if="service.description" class="text-white/50 text-lg mb-10 max-w-2xl mx-auto text-center">
+            {{ service.description }}
+          </p>
+
+          <!-- Card Paket -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <Card
+              v-for="price in service.prices"
+              :key="price.id"
+              class="bg-accent border-tertiary/20 text-white"
+            >
+              <CardHeader>
+                <CardTitle class="text-xl text-secondary">{{ price.package_name }}</CardTitle>
+                <CardDescription class="text-white/50">{{ price.description }}</CardDescription>
+              </CardHeader>
+
+              <CardContent>
+                <p class="text-3xl font-bold text-tertiary mb-6">
+                  {{ formatPrice(price.price) }}
+                </p>
+
+                <ul v-if="price.features?.length" class="space-y-3">
+                  <li
+                    v-for="(feature, index) in price.features"
+                    :key="index"
+                    class="flex items-start gap-2 text-white/70"
+                  >
+                    <BadgeCheck class="w-5 h-5 text-tertiary shrink-0 mt-0.5" />
+                    <span>{{ feature }}</span>
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
       </div>
     </section>
   </main>
@@ -145,19 +193,25 @@
 import { ref, onMounted } from 'vue'
 import { Motion } from 'motion-v'
 import * as LucideIcons from 'lucide-vue-next'
+import { BadgeCheck } from 'lucide-vue-next'
 import CardSwap from '@/components/ui/CardSwap.vue'
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
 import Noise from '@/components/ui/background/Noise.vue'
 import LightRays from '@/components/ui/background/LightRays.vue'
-import { getFeaturedServices } from '@/api/services'
+import { getServices, getFeaturedServices } from '@/api/services'
 import type { Service } from '@/types/service'
 
 const featuredServices = ref<Service[]>([])
+const services = ref<Service[]>([])
 
 onMounted(async () => {
   try {
-    featuredServices.value = await getFeaturedServices()
+    const [featured, all] = await Promise.all([getFeaturedServices(), getServices()])
+    featuredServices.value = featured
+    services.value = all
   } catch (error) {
-    console.error('Failed to fetch featured services:', error)
+    console.error('Failed to fetch services:', error)
   }
 })
 
@@ -175,6 +229,12 @@ const cardItems = (services: Service[]) => {
 // Helper untuk get icon component dari lucide
 const getIcon = (iconName: string) => {
   return (LucideIcons as Record<string, unknown>)[iconName] || LucideIcons.Box
+}
+
+// Format harga ke Rupiah
+const formatPrice = (price: string) => {
+  const num = Number(price)
+  return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(num)
 }
 
 // Handle card click
