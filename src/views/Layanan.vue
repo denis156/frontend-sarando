@@ -48,15 +48,11 @@
                 :alt="item.title"
                 class="absolute inset-0 w-full h-full object-cover"
               />
-              <!-- Overlay -->
-              <div
-                class="absolute inset-0 bg-linear-to-b from-black/80 via-black/40 to-transparent"
-              ></div>
               <!-- Content -->
               <div class="absolute top-0 left-0 right-0 p-3">
                 <div class="flex items-center">
-                  <component :is="getIcon(item.icon)" class="mr-2 w-5 h-5 text-secondary" />
-                  <span class="text-secondary text-base font-semibold">{{ item.title }}</span>
+                  <component :is="getIcon(item.icon)" class="mr-2 w-5 h-5 text-accent/70" />
+                  <span class="text-accent/70 text-base font-semibold">{{ item.title }}</span>
                 </div>
               </div>
             </div>
@@ -121,15 +117,11 @@
                     :alt="item.title"
                     class="absolute inset-0 w-full h-full object-cover"
                   />
-                  <!-- Overlay -->
-                  <div
-                    class="absolute inset-0 bg-linear-to-b from-black/80 via-black/40 to-transparent"
-                  ></div>
                   <!-- Content -->
                   <div class="absolute top-0 left-0 right-0 p-6">
                     <div class="flex items-center">
-                      <component :is="getIcon(item.icon)" class="mr-3 w-8 h-8 text-secondary" />
-                      <span class="text-secondary text-2xl font-semibold">{{ item.title }}</span>
+                      <component :is="getIcon(item.icon)" class="mr-3 w-8 h-8 text-accent/70" />
+                      <span class="text-accent/70 text-2xl font-semibold">{{ item.title }}</span>
                     </div>
                   </div>
                 </div>
