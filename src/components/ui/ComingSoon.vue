@@ -26,7 +26,7 @@ withDefaults(defineProps<Props>(), {
     <!-- Background Elements -->
     <div class="absolute inset-0 bg-background z-0"></div>
     <div
-      class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] pointer-events-none"
+      class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-125 h-125 bg-primary/5 rounded-full blur-[120px] pointer-events-none"
     ></div>
 
     <div class="relative z-10 flex flex-col items-center gap-8 max-w-lg">
@@ -53,7 +53,7 @@ withDefaults(defineProps<Props>(), {
           :transition="{ delay: 0.3, duration: 0.6 }"
         >
           <h1
-            class="text-4xl md:text-6xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-white to-neutral-500"
+            class="text-4xl md:text-6xl font-bold tracking-tighter text-transparent bg-clip-text bg-linear-to-br from-white to-neutral-500"
           >
             Segera Hadir
           </h1>

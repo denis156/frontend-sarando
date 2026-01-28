@@ -79,7 +79,7 @@ watch(height, (newHeight: number) => {
             height: heightTransform,
             opacity: opacityTransform,
           }"
-          class="absolute inset-x-0 top-0 w-[2px] rounded-full bg-gradient-to-t from-primary from-0% via-primary via-10% to-transparent"
+          class="absolute inset-x-0 top-0 w-[2px] rounded-full bg-linear-to-t from-primary from-0% via-primary via-10% to-transparent"
         />
       </div>
     </div>

@@ -103,7 +103,7 @@ const scrollToScene = (index: number) => {
 
         <!-- Gradient overlay -->
         <div
-          class="absolute inset-0 bg-gradient-to-b from-background/50 via-background/80 to-background transition-opacity duration-700"
+          class="absolute inset-0 bg-linear-to-b from-background/50 via-background/80 to-background transition-opacity duration-700"
           :class="[currentSceneIndex === 0 ? 'opacity-0' : 'opacity-100']"
         ></div>
 
@@ -160,7 +160,7 @@ const scrollToScene = (index: number) => {
 
               <div class="space-y-4 max-w-3xl px-4">
                 <h1
-                  class="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-white to-neutral-500 uppercase"
+                  class="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter text-transparent bg-clip-text bg-linear-to-br from-white to-neutral-500 uppercase"
                 >
                   SARANDO
                 </h1>
@@ -180,7 +180,7 @@ const scrollToScene = (index: number) => {
                 :transition="{ duration: 2, repeat: Infinity }"
               >
                 <span>Jelajahi</span>
-                <div class="w-px h-16 bg-gradient-to-b from-white/50 to-transparent"></div>
+                <div class="w-px h-16 bg-linear-to-b from-white/50 to-transparent"></div>
               </Motion>
             </div>
           </Motion>
@@ -202,7 +202,7 @@ const scrollToScene = (index: number) => {
                   class="text-center md:text-right flex-1 md:border-r border-border md:pr-10 py-2 md:py-4"
                 >
                   <h2
-                    class="text-5xl md:text-8xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-white to-neutral-500 uppercase"
+                    class="text-5xl md:text-8xl font-bold tracking-tighter text-transparent bg-clip-text bg-linear-to-br from-white to-neutral-500 uppercase"
                   >
                     SARA
                   </h2>
@@ -214,7 +214,7 @@ const scrollToScene = (index: number) => {
                 <div class="w-16 h-px bg-border md:hidden"></div>
                 <div class="text-center md:text-left flex-1 md:pl-10 py-2 md:py-4">
                   <h2
-                    class="text-5xl md:text-8xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-white to-neutral-500 uppercase"
+                    class="text-5xl md:text-8xl font-bold tracking-tighter text-transparent bg-clip-text bg-linear-to-br from-white to-neutral-500 uppercase"
                   >
                     NDO
                   </h2>
@@ -367,7 +367,7 @@ const scrollToScene = (index: number) => {
               >
                 <!-- Placeholder for Founder Image if not available separately, using a robust generic avatar or gradient for now -->
                 <div
-                  class="w-full h-full bg-gradient-to-br from-secondary/20 to-primary/20 flex items-center justify-center text-2xl md:text-4xl text-foreground font-bold"
+                  class="w-full h-full bg-linear-to-br from-secondary/20 to-primary/20 flex items-center justify-center text-2xl md:text-4xl text-foreground font-bold"
                 >
                   D
                 </div>

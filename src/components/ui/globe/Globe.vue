@@ -148,10 +148,10 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="absolute inset-0 mx-auto aspect-[1/1] w-full max-w-[600px]" :class="[$props.class]">
+  <div class="absolute inset-0 mx-auto aspect-square w-full max-w-150" :class="[$props.class]">
     <canvas
       ref="globeCanvasRef"
-      class="size-full opacity-0 transition-opacity duration-1000 ease-in-out [contain:layout_paint_size]"
+      class="size-full opacity-0 transition-opacity duration-1000 ease-in-out contain-[layout_paint_size]"
       @pointerdown="(e) => updatePointerInteraction(e.clientX)"
       @pointerup="updatePointerInteraction(null)"
       @pointerout="updatePointerInteraction(null)"

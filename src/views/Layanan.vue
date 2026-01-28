@@ -123,7 +123,7 @@ const timelineData = computed(() =>
         <Threads :color="[1, 1, 1]" :amplitude="1" :scale="0.8" />
       </div>
       <div
-        class="absolute inset-0 bg-gradient-to-b from-transparent via-background/50 to-background z-10"
+        class="absolute inset-0 bg-linear-to-b from-transparent via-background/50 to-background z-10"
       ></div>
 
       <!-- Content -->
@@ -137,7 +137,7 @@ const timelineData = computed(() =>
           }"
         >
           <h1
-            class="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-white to-neutral-500 uppercase"
+            class="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter text-transparent bg-clip-text bg-linear-to-br from-white to-neutral-500 uppercase"
           >
             Dedikasi
           </h1>
@@ -168,7 +168,7 @@ const timelineData = computed(() =>
         :transition="{ duration: 2, repeat: Infinity }"
       >
         <span>Jelajahi</span>
-        <div class="w-px h-12 bg-gradient-to-b from-foreground/50 to-transparent"></div>
+        <div class="w-px h-12 bg-linear-to-b from-foreground/50 to-transparent"></div>
       </Motion>
     </section>
 
@@ -221,7 +221,7 @@ const timelineData = computed(() =>
     <section class="py-24 md:py-32 px-4 bg-secondary/5 relative overflow-hidden">
       <!-- Decor -->
       <div
-        class="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] pointer-events-none"
+        class="absolute top-0 right-0 w-125 h-125 bg-primary/5 rounded-full blur-[120px] pointer-events-none"
       ></div>
 
       <div class="max-w-7xl mx-auto relative z-10">
@@ -266,7 +266,7 @@ const timelineData = computed(() =>
 
             <!-- Dark Overlay for Readability -->
             <div
-              class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/30 z-10"
+              class="absolute inset-0 bg-linear-to-t from-black/90 via-black/60 to-black/30 z-10"
             ></div>
 
             <!-- Content -->
@@ -299,7 +299,7 @@ const timelineData = computed(() =>
 
             <!-- Hover Gradient Accent -->
             <div
-              class="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-15"
+              class="absolute inset-0 bg-linear-to-br from-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-15"
             ></div>
           </div>
         </div>

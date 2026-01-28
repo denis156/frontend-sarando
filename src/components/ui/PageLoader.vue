@@ -14,7 +14,7 @@ const { isLoading } = usePageLoader()
   <AnimatePresence>
     <Motion
       v-if="isLoading"
-      class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-background pointer-events-none overflow-hidden"
+      class="fixed inset-0 z-100 flex flex-col items-center justify-center bg-background pointer-events-none overflow-hidden"
       :initial="{ y: '0%' }"
       :exit="{
         y: '-100%',
@@ -27,7 +27,7 @@ const { isLoading } = usePageLoader()
       <!-- Ambient Background Glow -->
       <div class="absolute inset-0 bg-background z-0"></div>
       <div
-        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-secondary/5 rounded-full blur-[100px] z-0 pointer-events-none animate-pulse"
+        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-150 h-150 bg-secondary/5 rounded-full blur-[100px] z-0 pointer-events-none animate-pulse"
       ></div>
 
       <div class="relative z-10 flex flex-col items-center gap-10">
@@ -62,7 +62,7 @@ const { isLoading } = usePageLoader()
 
           <!-- Sleek Progress Line -->
           <Motion
-            class="h-[2px] bg-secondary/30 rounded-full overflow-hidden w-48 md:w-64"
+            class="h-0.5 bg-secondary/30 rounded-full overflow-hidden w-48 md:w-64"
             :initial="{ opacity: 0 }"
             :animate="{ opacity: 1 }"
             :transition="{ delay: 0.2 }"
