@@ -30,6 +30,13 @@ const getIcon = (iconName: string | null) => {
 const getCardColSpan = (index: number): string => {
   const total = services.value.length
 
+  // Pattern for 3 services: [1, 2, 3]
+  if (total === 3) {
+    if (index === 1) return 'md:col-span-2'
+    if (index === 2) return 'md:col-span-3'
+    return ''
+  }
+
   // Pattern for 4 services: [1, 2, 2, 1]
   if (total === 4) {
     if (index === 1 || index === 2) return 'md:col-span-2'
@@ -60,7 +67,7 @@ const getCardColSpan = (index: number): string => {
     return ''
   }
 
-  // Default: 3 or fewer services, all 1 col
+  // Default: 1 or 2 services, all 1 col
   return ''
 }
 
