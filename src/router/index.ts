@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
-import Home from '@/views/Home.vue'
+import Beranda from '@/views/Beranda.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -11,8 +11,8 @@ const router = createRouter({
       children: [
         {
           path: '',
-          name: 'home',
-          component: Home,
+          name: 'beranda', // Changed from 'home' to match file
+          component: Beranda,
         },
         {
           path: 'blog',
