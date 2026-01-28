@@ -140,20 +140,20 @@ const scrollToScene = (index: number) => {
           :class="[currentSceneIndex === 0 ? 'opacity-0' : 'opacity-100']"
         ></div>
 
-        <!-- Persistent World Map Layer (Fixes lag by mounting once) -->
+        <!-- Persistent World Map Layer (Desktop Only - Fixes lag by mounting once) -->
         <div
-          class="absolute inset-0 flex items-center justify-center transition-opacity duration-700 ease-in-out pointer-events-none"
+          class="absolute inset-0 hidden md:flex items-center justify-center transition-opacity duration-700 ease-in-out pointer-events-none"
           :class="[currentSceneIndex === 2 ? 'opacity-100' : 'opacity-0']"
         >
           <div
-            class="w-full max-w-6xl px-4 md:px-8 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12"
+            class="w-full max-w-6xl px-4 md:px-8 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 items-center"
           >
-            <!-- Spacer for text column -->
-            <div class="hidden md:block"></div>
+            <!-- Spacer for text column on Desktop -->
+            <div class="hidden md:block order-1"></div>
 
-            <!-- Map Container Positioned to match Scene 3 layout -->
+            <!-- Map Container - appears FIRST on mobile (order-1), SECOND on desktop (order-2) -->
             <div
-              class="relative h-[250px] md:h-[400px] w-full bg-card/50 rounded-2xl overflow-hidden border border-border backdrop-blur-sm flex items-center justify-center"
+              class="relative h-[200px] md:h-[400px] w-full bg-card/50 rounded-2xl overflow-hidden border border-border backdrop-blur-sm flex items-center justify-center order-first md:order-2"
             >
               <WorldMap
                 :dots="mapDots"
@@ -280,7 +280,8 @@ const scrollToScene = (index: number) => {
             <div
               class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 max-w-6xl items-center w-full"
             >
-              <div class="space-y-4 md:space-y-6 order-2 md:order-1">
+              <!-- Text Content: SECOND on mobile (order-2/order-last), FIRST on desktop (order-1) -->
+              <div class="space-y-4 md:space-y-6 order-last md:order-1">
                 <div class="border-l-4 border-accent pl-4 md:pl-6 py-2">
                   <h2 class="text-3xl md:text-5xl font-bold leading-tight">
                     Stigma Daerah
@@ -303,9 +304,22 @@ const scrollToScene = (index: number) => {
                 </p>
               </div>
 
-              <!-- Placeholder for layout spacing, actual map is in persistent background layer -->
-              <div class="h-[250px] md:h-[400px] w-full order-1 md:order-2 invisible">
-                <!-- Invisible spacer to keep layout grid intact -->
+              <!-- Map Container: Visible on MOBILE, hidden on desktop (desktop uses persistent layer) -->
+              <div
+                class="relative h-[250px] w-full bg-card/50 rounded-2xl overflow-hidden border border-border backdrop-blur-sm flex items-center justify-center order-first md:hidden"
+              >
+                <WorldMap
+                  :dots="mapDots"
+                  line-color="var(--primary)"
+                  map-color="#FFFFFF40"
+                  map-bg-color="transparent"
+                  class="w-full h-full"
+                />
+              </div>
+
+              <!-- Invisible spacer for DESKTOP only (to match persistent map layer) -->
+              <div class="hidden md:block h-[400px] w-full order-2 invisible">
+                <!-- Invisible spacer for desktop grid layout -->
               </div>
             </div>
           </Motion>
