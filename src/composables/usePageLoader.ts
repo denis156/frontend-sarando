@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 
-const isLoading = ref(false)
+const isLoading = ref(true)
 
 export function usePageLoader() {
   const startLoading = () => {

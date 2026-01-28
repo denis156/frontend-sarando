@@ -44,7 +44,7 @@ import { usePageLoader } from '@/composables/usePageLoader'
 
 router.beforeEach((to, from, next) => {
   const { startLoading } = usePageLoader()
-  // Trigger loading only if moving to a different route
+  // Trigger loading on route change
   if (to.path !== from.path) {
     startLoading()
   }
