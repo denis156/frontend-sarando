@@ -3,12 +3,13 @@ import { computed, ref, onMounted } from 'vue'
 import { Motion, AnimatePresence } from 'motion-v'
 import { RouterLink } from 'vue-router'
 import { useWindowScroll, useWindowSize, usePreferredReducedMotion } from '@vueuse/core'
-import { Button } from '@/components/ui/button'
+
 import Threads from '@/components/ui/background/Threads.vue'
 import SubmarkLogo from '@/assets/submark-logo.png'
 import * as LucideIcons from 'lucide-vue-next'
 import { ExternalLink, Mail, MapPin } from 'lucide-vue-next'
 import { Globe } from '@/components/ui/globe'
+
 import { getFeaturedServices } from '@/api/services'
 import type { Service } from '@/types/service'
 
@@ -95,7 +96,7 @@ const scrollToScene = (index: number) => {
         <!-- Threads Background: Visible nicely in Scene 0, subtle elsewhere -->
         <div
           class="absolute inset-0 transition-opacity duration-1000 ease-in-out"
-          :class="[currentSceneIndex === 0 ? 'opacity-100' : 'opacity-20']"
+          :class="[currentSceneIndex === 0 ? 'opacity-50' : 'opacity-20']"
         >
           <Threads :color="[1, 1, 1]" :amplitude="1.5" />
         </div>
@@ -159,12 +160,16 @@ const scrollToScene = (index: number) => {
 
               <div class="space-y-4 max-w-3xl px-4">
                 <h1
-                  class="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-white mix-blend-overlay"
+                  class="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-white to-neutral-500 uppercase"
                 >
                   SARANDO
                 </h1>
-                <p class="text-lg md:text-2xl text-secondary font-light tracking-wide">
-                  Adat yang bertemu teknologi
+                <p
+                  class="text-xl md:text-2xl text-muted-foreground font-light max-w-2xl mx-auto leading-relaxed"
+                >
+                  <span class="text-primary font-medium">Adat yang bertemu teknologi.</span> Merakit
+                  solusi digital berstandar global dengan jiwa kearifan lokal dari
+                  <span class="text-secondary font-medium">Konawe, Sulawesi Tenggara</span>.
                 </p>
               </div>
 
@@ -197,9 +202,9 @@ const scrollToScene = (index: number) => {
                   class="text-center md:text-right flex-1 md:border-r border-border md:pr-10 py-2 md:py-4"
                 >
                   <h2
-                    class="text-5xl md:text-8xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-secondary to-primary"
+                    class="text-5xl md:text-8xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-white to-neutral-500 uppercase"
                   >
-                    Sara
+                    SARA
                   </h2>
                   <p class="text-muted-foreground mt-2 text-base md:text-lg">
                     Adat & Tradisi Leluhur
@@ -209,9 +214,9 @@ const scrollToScene = (index: number) => {
                 <div class="w-16 h-px bg-border md:hidden"></div>
                 <div class="text-center md:text-left flex-1 md:pl-10 py-2 md:py-4">
                   <h2
-                    class="text-5xl md:text-8xl font-bold text-transparent bg-clip-text bg-gradient-to-bl from-secondary to-primary"
+                    class="text-5xl md:text-8xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-white to-neutral-500 uppercase"
                   >
-                    Ndo
+                    NDO
                   </h2>
                   <p class="text-muted-foreground mt-2 text-base md:text-lg">Kebersamaan Kita</p>
                 </div>
@@ -413,23 +418,19 @@ const scrollToScene = (index: number) => {
               <div
                 class="flex flex-col sm:flex-row gap-4 justify-center pt-4 md:pt-8 w-full max-w-sm mx-auto sm:max-w-none"
               >
-                <Button
-                  size="lg"
-                  class="px-8 text-base md:text-lg h-12 md:h-14 bg-primary hover:bg-primary/90 text-white rounded-full w-full sm:w-auto"
+                <RouterLink
+                  to="/kontak"
+                  class="inline-flex h-12 md:h-14 items-center justify-center gap-2 rounded-full bg-primary px-8 text-base md:text-lg font-medium text-white shadow transition-colors hover:bg-primary/90 w-full sm:w-auto"
                 >
-                  <RouterLink to="/kontak" class="flex items-center justify-center gap-2 w-full">
-                    <Mail class="w-5 h-5" /> Hubungi Kami
-                  </RouterLink>
-                </Button>
-                <Button
-                  size="lg"
-                  variant="outline"
-                  class="px-8 text-base md:text-lg h-12 md:h-14 rounded-full border-border hover:bg-secondary/10 text-white w-full sm:w-auto"
+                  <Mail class="w-5 h-5" />
+                  Hubungi Kami
+                </RouterLink>
+                <RouterLink
+                  to="/layanan"
+                  class="inline-flex h-12 md:h-14 items-center justify-center rounded-full border border-input bg-transparent px-8 text-base md:text-lg font-medium text-foreground shadow-sm transition-colors hover:bg-secondary hover:text-secondary-foreground w-full sm:w-auto"
                 >
-                  <RouterLink to="/layanan" class="flex items-center justify-center w-full">
-                    Pelajari Layanan
-                  </RouterLink>
-                </Button>
+                  Pelajari Layanan
+                </RouterLink>
               </div>
 
               <footer

@@ -119,7 +119,7 @@ const timelineData = computed(() =>
     <!-- 1. HERO SECTION -->
     <section class="relative h-dvh flex flex-col items-center justify-center overflow-hidden">
       <!-- Background Elements -->
-      <div class="absolute inset-0 z-0 opacity-40">
+      <div class="absolute inset-0 z-0 opacity-50">
         <Threads :color="[1, 1, 1]" :amplitude="1" :scale="0.8" />
       </div>
       <div
@@ -331,7 +331,7 @@ const timelineData = computed(() =>
           </RouterLink>
           <RouterLink
             to="/proyek"
-            class="inline-flex h-14 items-center justify-center rounded-full border border-input bg-transparent px-8 text-lg font-medium text-foreground shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground"
+            class="inline-flex h-14 items-center justify-center rounded-full border border-input bg-transparent px-8 text-lg font-medium text-foreground shadow-sm transition-colors hover:bg-secondary hover:text-secondary-foreground"
           >
             Lihat Portofolio
           </RouterLink>
