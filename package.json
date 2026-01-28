@@ -19,7 +19,7 @@
     "axios": "^1.13.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "dotted-map": "^2.2.3",
+    "cobe": "^0.6.5",
     "gsap": "^3.14.2",
     "lucide-vue-next": "^0.563.0",
     "motion-v": "^1.10.2",
@@ -29,7 +29,8 @@
     "tailwind-merge": "^3.4.0",
     "tailwindcss": "^4.1.18",
     "vue": "^3.5.26",
-    "vue-router": "^4.6.4"
+    "vue-router": "^4.6.4",
+    "vue-use-spring": "^0.3.3"
   },
   "devDependencies": {
     "@tsconfig/node24": "^24.0.4",

@@ -7,44 +7,10 @@ import { Button } from '@/components/ui/button'
 import Threads from '@/components/ui/background/Threads.vue'
 import SubmarkLogo from '@/assets/submark-logo.png'
 import * as LucideIcons from 'lucide-vue-next'
-import { ArrowDown, ExternalLink, Mail, MapPin } from 'lucide-vue-next'
-import WorldMap from '@/components/ui/world-map/WorldMap.vue'
+import { ExternalLink, Mail, MapPin } from 'lucide-vue-next'
+import { Globe } from '@/components/ui/globe'
 import { getFeaturedServices } from '@/api/services'
 import type { Service } from '@/types/service'
-
-// --- Map Config ---
-const mapDots = [
-  {
-    start: {
-      lat: 121.9729,
-      lng: -3.7672,
-    }, // Alaska (Fairbanks)
-    end: {
-      lat: 34.0522,
-      lng: -118.2437,
-    }, // Los Angeles
-  },
-  {
-    start: { lat: 121.9729, lng: -3.7672 }, // Alaska (Fairbanks)
-    end: { lat: -15.7975, lng: -47.8919 }, // Brazil (Brasília)
-  },
-  {
-    start: { lat: -15.7975, lng: -47.8919 }, // Brazil (Brasília)
-    end: { lat: 38.7223, lng: -9.1393 }, // Lisbon
-  },
-  {
-    start: { lat: 51.5074, lng: -0.1278 }, // London
-    end: { lat: 28.6139, lng: 77.209 }, // New Delhi
-  },
-  {
-    start: { lat: 28.6139, lng: 77.209 }, // New Delhi
-    end: { lat: 43.1332, lng: 131.9113 }, // Vladivostok
-  },
-  {
-    start: { lat: 28.6139, lng: 77.209 }, // New Delhi
-    end: { lat: -1.2921, lng: 36.8219 }, // Nairobi
-  },
-]
 
 // --- Constants ---
 const SCENE_COUNT = 7 // Hero, Origin, Problem, Solution, Services, Founder, CTA
@@ -126,43 +92,38 @@ const scrollToScene = (index: number) => {
     >
       <!-- Background Layer -->
       <div class="absolute inset-0 z-0">
-        <!-- Threads Background: Only visible in scene 0, but we can keep it subtle throughout or fade it -->
+        <!-- Threads Background: Visible nicely in Scene 0, subtle elsewhere -->
         <div
           class="absolute inset-0 transition-opacity duration-1000 ease-in-out"
           :class="[currentSceneIndex === 0 ? 'opacity-100' : 'opacity-20']"
         >
-          <Threads :color="[1, 1, 1]" :amplitude="1.5" :scale="currentSceneIndex === 0 ? 1 : 0.5" />
+          <Threads :color="[1, 1, 1]" :amplitude="1.5" />
         </div>
 
-        <!-- Gradient overlay for better text readability on other scenes -->
+        <!-- Gradient overlay -->
         <div
           class="absolute inset-0 bg-gradient-to-b from-background/50 via-background/80 to-background transition-opacity duration-700"
           :class="[currentSceneIndex === 0 ? 'opacity-0' : 'opacity-100']"
         ></div>
 
-        <!-- Persistent World Map Layer (Desktop Only - Fixes lag by mounting once) -->
+        <!-- Persistent World Map Layer (Desktop & Mobile - Fixes lag by mounting once) -->
         <div
-          class="absolute inset-0 hidden md:flex items-center justify-center transition-opacity duration-700 ease-in-out pointer-events-none"
+          class="absolute inset-0 flex items-end justify-center transition-opacity duration-700 ease-in-out pointer-events-none"
           :class="[currentSceneIndex === 2 ? 'opacity-100' : 'opacity-0']"
         >
+          <!-- Map Container - Full Width, Bottom Aligned, No Border/Background -->
+          <!-- Globe Container -->
           <div
-            class="w-full max-w-6xl px-4 md:px-8 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 items-center"
+            class="w-full h-[60dvh] md:h-[80dvh] relative overflow-hidden flex items-end justify-center perspective-1000"
           >
-            <!-- Spacer for text column on Desktop -->
-            <div class="hidden md:block order-1"></div>
+            <Globe
+              class="translate-y-[60%] md:translate-y-[75%] opacity-90 scale-125 md:scale-110"
+            />
 
-            <!-- Map Container - appears FIRST on mobile (order-1), SECOND on desktop (order-2) -->
+            <!-- Radial overlay to focus on center -->
             <div
-              class="relative h-[200px] md:h-[400px] w-full bg-card/50 rounded-2xl overflow-hidden border border-border backdrop-blur-sm flex items-center justify-center order-first md:order-2"
-            >
-              <WorldMap
-                :dots="mapDots"
-                line-color="var(--primary)"
-                map-color="#FFFFFF40"
-                map-bg-color="transparent"
-                class="w-full h-full"
-              />
-            </div>
+              class="absolute inset-0 bg-[radial-gradient(circle_at_50%_100%,transparent_30%,var(--background)_90%)] pointer-events-none opacity-80"
+            ></div>
           </div>
         </div>
       </div>
@@ -209,16 +170,12 @@ const scrollToScene = (index: number) => {
 
               <!-- Scroll Hint -->
               <Motion
+                class="absolute bottom-12 md:bottom-16 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 text-muted-foreground/70 text-xs uppercase tracking-[0.3em] font-light"
                 :animate="{ y: [0, 10, 0], opacity: [0.5, 1, 0.5] }"
                 :transition="{ duration: 2, repeat: Infinity }"
-                class="absolute bottom-12 md:bottom-24 left-1/2 -translate-x-1/2"
               >
-                <div
-                  class="flex flex-col items-center gap-2 text-neutral-500 text-sm uppercase tracking-widest"
-                >
-                  <span>Scroll</span>
-                  <ArrowDown class="w-4 h-4" />
-                </div>
+                <span>Jelajahi</span>
+                <div class="w-px h-16 bg-gradient-to-b from-white/50 to-transparent"></div>
               </Motion>
             </div>
           </Motion>
@@ -273,58 +230,33 @@ const scrollToScene = (index: number) => {
         <AnimatePresence>
           <Motion
             v-if="currentSceneIndex === 2"
-            class="absolute inset-0 flex items-start pt-20 md:items-center md:pt-0 justify-center p-6"
-            :initial="{ opacity: 0, x: 50 }"
-            :animate="{ opacity: 1, x: 0 }"
-            :exit="{ opacity: 0, x: -50 }"
+            class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center"
+            :initial="{ opacity: 0, y: 30 }"
+            :animate="{ opacity: 1, y: 0 }"
+            :exit="{ opacity: 0, y: -30 }"
             :transition="smoothTransition"
           >
-            <div
-              class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 max-w-6xl items-center w-full"
-            >
-              <!-- Text Content: SECOND on mobile (order-2/order-last), FIRST on desktop (order-1) -->
-              <div class="space-y-4 md:space-y-6 order-last md:order-1">
-                <div class="border-l-4 border-accent pl-4 md:pl-6 py-2">
-                  <h2 class="text-3xl md:text-5xl font-bold leading-tight">
-                    Stigma Daerah
-                    <div
-                      class="text-xl md:text-2xl text-accent font-mono font-bold my-1 md:my-2 opacity-80 flex items-center gap-4"
-                    >
-                      <span class="w-8 md:w-12 h-px bg-accent/50"></span>
-                      VS
-                      <span class="w-8 md:w-12 h-px bg-accent/50"></span>
-                    </div>
-                    Kualitas Dunia
-                  </h2>
-                </div>
-                <p
-                  class="text-sm md:text-lg text-muted-foreground leading-relaxed pl-4 md:pl-6 border-l-4 border-transparent"
+            <div class="max-w-5xl space-y-6 md:space-y-8 relative z-20">
+              <h2 class="text-3xl md:text-5xl font-bold leading-tight">
+                Stigma Daerah
+                <div
+                  class="text-xl md:text-2xl text-accent font-mono font-bold my-1 md:my-2 opacity-80 flex items-center justify-center gap-4"
                 >
-                  Seringkali potensi daerah dipandang sebelah mata. Padahal, inovasi tidak mengenal
-                  batas geografis. Kami membuktikan bahwa talenta dari
-                  <strong>Konawe, Sulawesi Tenggara</strong> mampu melahirkan solusi teknologi
-                  berstandar global yang presisi, tangguh, dan estetik.
-                </p>
-              </div>
-
-              <!-- Map Container: Visible on MOBILE, hidden on desktop (desktop uses persistent layer) -->
-              <div
-                class="relative h-[250px] w-full bg-card/50 rounded-2xl overflow-hidden border border-border backdrop-blur-sm flex items-center justify-center order-first md:hidden"
-              >
-                <WorldMap
-                  :dots="mapDots"
-                  line-color="var(--primary)"
-                  map-color="#FFFFFF40"
-                  map-bg-color="transparent"
-                  class="w-full h-full"
-                />
-              </div>
-
-              <!-- Invisible spacer for DESKTOP only (to match persistent map layer) -->
-              <div class="hidden md:block h-[400px] w-full order-2 invisible">
-                <!-- Invisible spacer for desktop grid layout -->
-              </div>
+                  <span class="w-8 md:w-12 h-px bg-accent/50"></span>
+                  VS
+                  <span class="w-8 md:w-12 h-px bg-accent/50"></span>
+                </div>
+                Kualitas Dunia
+              </h2>
+              <p class="text-sm md:text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto">
+                Seringkali potensi daerah dipandang sebelah mata. Padahal, inovasi tidak mengenal
+                batas geografis. Kami membuktikan bahwa talenta dari
+                <strong class="text-primary">Konawe, Sulawesi Tenggara</strong> mampu melahirkan
+                solusi teknologi berstandar global yang presisi, tangguh, dan estetik.
+              </p>
             </div>
+
+            <!-- Map moves to persistent layer below, filling bottom screen -->
           </Motion>
         </AnimatePresence>
 
