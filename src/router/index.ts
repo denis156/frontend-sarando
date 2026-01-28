@@ -39,4 +39,24 @@ const router = createRouter({
   ],
 })
 
+// Page Transition Loader Logic
+import { usePageLoader } from '@/composables/usePageLoader'
+
+router.beforeEach((to, from, next) => {
+  const { startLoading } = usePageLoader()
+  // Trigger loading only if moving to a different route
+  if (to.path !== from.path) {
+    startLoading()
+  }
+  next()
+})
+
+router.afterEach(() => {
+  const { finishLoading } = usePageLoader()
+  // Add a small delay to simulate loading or ensure entering animation plays
+  setTimeout(() => {
+    finishLoading()
+  }, 800)
+})
+
 export default router

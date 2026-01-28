@@ -1,43 +1,23 @@
 <template>
-  <!-- Staggered Menu -->
-  <div class="fixed inset-0 w-full h-dvh z-50" style="pointer-events: none">
-    <StaggeredMenu
-      position="right"
-      :items="MENU_ITEMS"
-      :social-items="SOCIAL_ITEMS"
-      :display-socials="true"
-      :display-item-numbering="true"
-      menu-button-color="#f0e491"
-      open-menu-button-color="#31694e"
-      :change-menu-color-on-open="true"
-      :colors="['#bbc863', '#31694e']"
-      logo-url="/src/assets/submark-logo.png"
-      accent-color="#31694e"
-      @menu-open="handleMenuOpen"
-      @menu-close="handleMenuClose"
-    />
-  </div>
+  <div class="min-h-dvh flex flex-col">
+    <PageLoader />
+    <TheNavbar />
 
-  <!-- Page Content -->
-  <router-view />
+    <!-- Page Content -->
+    <div class="flex-1">
+      <router-view />
+    </div>
+
+    <!-- Global Footer (Hide on Home page because it has its own footer scene) -->
+    <TheFooter v-if="route.path !== '/'" />
+  </div>
 </template>
 
 <script setup lang="ts">
-import StaggeredMenu from '@/components/navigation/StaggeredMenu.vue'
-import { MENU_ITEMS, SOCIAL_ITEMS } from '@/constants/navigation'
+import { useRoute } from 'vue-router'
+import TheNavbar from '@/components/layout/TheNavbar.vue'
+import TheFooter from '@/components/layout/TheFooter.vue'
+import PageLoader from '@/components/ui/PageLoader.vue'
 
-const handleMenuOpen = () => console.log('Menu opened')
-const handleMenuClose = () => console.log('Menu closed')
+const route = useRoute()
 </script>
-
-<style scoped>
-/* Override pointer-events untuk StaggeredMenu */
-:deep(.staggered-menu-wrapper) {
-  pointer-events: none;
-}
-
-:deep(.staggered-menu-header),
-:deep(.staggered-menu-panel) {
-  pointer-events: auto;
-}
-</style>
