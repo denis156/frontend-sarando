@@ -1,15 +1,24 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { Motion } from 'motion-v'
 import { RouterLink } from 'vue-router'
 import * as LucideIcons from 'lucide-vue-next'
-import { ArrowRight } from 'lucide-vue-next'
+import { ArrowRight, Mail } from 'lucide-vue-next'
 import TechMarquee from '@/components/ui/TechMarquee.vue'
+import { Timeline } from '@/components/ui/timeline'
 import Threads from '@/components/ui/background/Threads.vue'
 import { getServices } from '@/api/services'
 import type { Service } from '@/types/service'
+import { useScrollAnimation } from '@/composables/useScrollAnimation'
 
 const services = ref<Service[]>([])
+
+// Scroll-linked animations
+const heroTitle = useScrollAnimation('fadeUp')
+const heroDesc = useScrollAnimation('fadeUp')
+const processHeader = useScrollAnimation('fadeLeft')
+const servicesHeader = useScrollAnimation('fadeRight')
+const cta = useScrollAnimation('scaleUp')
 
 onMounted(async () => {
   try {
@@ -74,32 +83,41 @@ const getCardColSpan = (index: number): string => {
 // Process Steps
 const processes = [
   {
-    title: 'Discovery',
-    desc: 'Kami mendalami bisnis Anda, memahami tantangan, dan menetapkan tujuan strategis.',
+    title: 'Penelusuran',
+    desc: 'Kami memulainya dengan duduk bersama, mendengarkan setiap keluhan dan aspirasi Anda layaknya keluarga. Kami menggali akar masalah sistem Anda, bukan sekadar permukaannya.',
     icon: 'Search',
   },
   {
-    title: 'Design',
-    desc: 'Merancang arsitektur sistem dan antarmuka yang estetis, fungsional, dan intuitif.',
+    title: 'Perancangan',
+    desc: 'Solusi lahir dari pemahaman mendalam. Kami merancang arsitektur yang menjawab titik lemah sistem lama Anda dengan pendekatan yang manusiawi, fungsional, dan estetik.',
     icon: 'PenTool',
   },
   {
-    title: 'Develop',
-    desc: 'Eksekusi kode presisi tinggi dengan standar industri terbaru untuk performa maksimal.',
+    title: 'Pembangunan',
+    desc: 'Setiap baris kode kami tulis dengan niat untuk menyempurnakan. Kami membangun sistem yang tidak hanya canggih, tapi juga menutup celah kekurangan masa lalu untuk masa depan yang lebih baik.',
     icon: 'Code2',
   },
   {
-    title: 'Deploy',
-    desc: 'Peluncuran mulus ke publik dengan monitoring ketat untuk memastikan stabilitas.',
+    title: 'Peluncuran',
+    desc: 'Karya ini kami persembahkan untuk Anda. Melalui pengujian ketat, kami pastikan sistem berjalan mulus, membawa ketenangan pikiran dan lembaran baru bagi usaha Anda.',
     icon: 'Rocket',
   },
 ]
+
+const timelineData = computed(() =>
+  processes.map((step, index) => ({
+    id: `step-${index}`,
+    label: step.title,
+    desc: step.desc,
+    icon: step.icon,
+  })),
+)
 </script>
 
 <template>
-  <main class="relative bg-background text-foreground min-h-screen">
+  <main class="relative bg-background text-foreground min-h-dvh">
     <!-- 1. HERO SECTION -->
-    <section class="relative h-screen flex flex-col items-center justify-center overflow-hidden">
+    <section class="relative h-dvh flex flex-col items-center justify-center overflow-hidden">
       <!-- Background Elements -->
       <div class="absolute inset-0 z-0 opacity-40">
         <Threads :color="[1, 1, 1]" :amplitude="1" :scale="0.8" />
@@ -111,28 +129,34 @@ const processes = [
       <!-- Content -->
       <div class="relative z-20 text-center px-4 max-w-5xl mx-auto space-y-8">
         <Motion
-          :initial="{ opacity: 0, y: 30 }"
-          :animate="{ opacity: 1, y: 0 }"
-          :transition="{ duration: 0.8, ease: 'easeOut' }"
+          :ref="(el) => (heroTitle.targetRef.value = el as HTMLElement)"
+          :style="{
+            opacity: heroTitle.opacity,
+            y: heroTitle.y,
+            filter: `blur(${heroTitle.blur}px)`,
+          }"
         >
           <h1
             class="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-white to-neutral-500 uppercase"
           >
-            Expertise
+            Dedikasi
           </h1>
         </Motion>
 
         <Motion
-          :initial="{ opacity: 0, y: 30 }"
-          :animate="{ opacity: 1, y: 0 }"
-          :transition="{ duration: 0.8, delay: 0.2, ease: 'easeOut' }"
+          :ref="(el) => (heroDesc.targetRef.value = el as HTMLElement)"
+          :style="{
+            opacity: heroDesc.opacity,
+            y: heroDesc.y,
+            filter: `blur(${heroDesc.blur}px)`,
+          }"
         >
           <p
             class="text-xl md:text-2xl text-muted-foreground font-light max-w-2xl mx-auto leading-relaxed"
           >
-            Membangun infrastruktur digital masa depan dengan
-            <span class="text-primary font-medium">presisi</span> dan
-            <span class="text-secondary font-medium">estetika</span>.
+            Membangun ekosistem digital dengan sentuhan
+            <span class="text-primary font-medium">hati</span> dan
+            <span class="text-secondary font-medium">keunggulan teknologi</span>.
           </p>
         </Motion>
       </div>
@@ -143,7 +167,7 @@ const processes = [
         :animate="{ y: [0, 10, 0] }"
         :transition="{ duration: 2, repeat: Infinity }"
       >
-        <span>Explore</span>
+        <span>Jelajahi</span>
         <div class="w-px h-12 bg-gradient-to-b from-foreground/50 to-transparent"></div>
       </Motion>
     </section>
@@ -152,90 +176,46 @@ const processes = [
     <TechMarquee />
 
     <!-- 3. PROCESS TIMELINE -->
-    <section class="py-24 md:py-32 px-4 relative z-10 overflow-hidden">
-      <div class="max-w-5xl mx-auto relative">
-        <div class="mb-16 md:mb-24 text-center">
+    <div class="relative z-0 py-24 md:py-32">
+      <!-- Custom Header -->
+      <div class="max-w-5xl mx-auto relative px-4 text-left mb-12">
+        <Motion
+          :ref="(el) => (processHeader.targetRef.value = el as HTMLElement)"
+          :style="{
+            opacity: processHeader.opacity,
+            x: processHeader.x,
+            filter: `blur(${processHeader.blur}px)`,
+          }"
+        >
           <h2 class="text-sm font-bold text-primary tracking-[0.5em] uppercase mb-4">
-            Bagaimana Kami Bekerja
+            Proses & Metode
           </h2>
-          <h3 class="text-3xl md:text-5xl font-bold">The Sarando Way</h3>
-        </div>
-
-        <div class="relative flex flex-col gap-12 md:gap-24">
-          <Motion
-            v-for="(step, index) in processes"
-            :key="index"
-            class="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-0"
-            :initial="{ opacity: 0, y: 30 }"
-            :whileInView="{ opacity: 1, y: 0 }"
-            :transition="{ delay: index * 0.1, duration: 0.6 }"
-            viewport="{ once: true, margin: '-10% 0px -10% 0px' }"
-          >
-            <!-- Connector Line to Next Item (Except Last) -->
-            <!--
-                 Logic:
-                 - Mobile (default): Left-aligned line (left-8).
-                 - Desktop (md): Center-aligned line (left-1/2).
-                 - Height: Spans from center of current node to center of next node.
-                   Since we have gaps, we approximate the height. gap-12 = 3rem, gap-24 = 6rem.
-                   We make it slightly longer to ensure overlap.
-               -->
-            <div
-              v-if="index !== processes.length - 1"
-              class="absolute left-8 md:left-1/2 top-12 w-px bg-white/10 -translate-x-1/2 md:translate-x-0 z-0 h-[calc(100%+48px)] md:h-[calc(100%+96px)]"
-            >
-              <!-- Progress Fill for Segment -->
-              <Motion
-                class="w-full bg-primary origin-top"
-                style="height: 100%"
-                :initial="{ scaleY: 0 }"
-                :whileInView="{ scaleY: 1 }"
-                :transition="{ duration: 1.5, ease: 'easeInOut' }"
-                viewport="{ once: true, amount: 0.5 }"
-              />
-            </div>
-
-            <!-- Left Side -->
-            <div class="order-2 md:order-1 flex items-center md:justify-end md:pr-12 pl-24 md:pl-0">
-              <!-- Desktop Even Text -->
-              <div v-if="index % 2 === 0" class="hidden md:block text-right">
-                <h4 class="text-2xl font-bold mb-2 text-foreground">{{ step.title }}</h4>
-                <p class="text-muted-foreground text-base leading-relaxed">{{ step.desc }}</p>
-              </div>
-
-              <!-- Mobile Text: Always rendered here on mobile -->
-              <div class="md:hidden text-left">
-                <h4 class="text-2xl font-bold mb-2 text-foreground">{{ step.title }}</h4>
-                <p class="text-muted-foreground text-base leading-relaxed">{{ step.desc }}</p>
-              </div>
-            </div>
-
-            <!-- Center Node (Absolute: Left on Mobile, Center on Desktop) -->
-            <div
-              class="absolute left-8 md:left-1/2 top-0 -translate-x-1/2 w-12 h-12 flex items-center justify-center z-20"
-            >
-              <div
-                class="w-full h-full bg-background rounded-full border border-white/10 flex items-center justify-center shadow-[0_0_20px_rgba(0,0,0,0.5)] group hover:border-primary transition-colors duration-300 relative z-30"
-              >
-                <component
-                  :is="(LucideIcons as any)[step.icon]"
-                  class="w-5 h-5 text-primary group-hover:scale-110 transition-transform"
-                />
-              </div>
-            </div>
-
-            <!-- Right Side -->
-            <div class="order-2 md:order-2 flex items-center md:pl-12 pl-24 md:pl-0">
-              <!-- Desktop Odd Text -->
-              <div v-if="index % 2 !== 0" class="hidden md:block text-left">
-                <h4 class="text-2xl font-bold mb-2 text-foreground">{{ step.title }}</h4>
-                <p class="text-muted-foreground text-base leading-relaxed">{{ step.desc }}</p>
-              </div>
-            </div>
-          </Motion>
-        </div>
+          <h3 class="text-3xl md:text-5xl font-bold mb-6">Filosofi Kerja Sarando</h3>
+          <p class="text-muted-foreground text-lg max-w-2xl">
+            Nilai-nilai luhur yang kami pegang teguh dalam setiap baris kode yang kami tulis,
+            memastikan kualitas terbaik untuk Anda.
+          </p>
+        </Motion>
       </div>
-    </section>
+
+      <Timeline :items="timelineData">
+        <template v-for="item in timelineData" :key="item.id" #[item.id]>
+          <div class="relative w-full pr-4 pl-20 md:pl-4">
+            <!-- Mobile Title (Hidden on desktop because label is on the left) -->
+            <h3 class="mb-4 block text-left text-2xl font-bold text-foreground md:hidden">
+              {{ item.label }}
+            </h3>
+
+            <div class="flex flex-col gap-6">
+              <!-- Description -->
+              <p class="text-base md:text-lg font-normal text-muted-foreground leading-relaxed">
+                {{ item.desc }}
+              </p>
+            </div>
+          </div>
+        </template>
+      </Timeline>
+    </div>
 
     <!-- 4. SERVICES BENTO GRID -->
     <section class="py-24 md:py-32 px-4 bg-secondary/5 relative overflow-hidden">
@@ -245,25 +225,36 @@ const processes = [
       ></div>
 
       <div class="max-w-7xl mx-auto relative z-10">
-        <div class="mb-16 md:mb-24 text-center md:text-left">
-          <h2 class="text-sm font-bold text-primary tracking-[0.5em] uppercase mb-4">
-            Kapabilitas Kami
-          </h2>
-          <h3 class="text-3xl md:text-5xl font-bold">Solusi Tanpa Batas</h3>
+        <div class="mb-16 md:mb-24 text-right flex flex-col items-end">
+          <Motion
+            :ref="(el) => (servicesHeader.targetRef.value = el as HTMLElement)"
+            class="text-right flex flex-col items-end"
+            :style="{
+              opacity: servicesHeader.opacity,
+              x: servicesHeader.x,
+              filter: `blur(${servicesHeader.blur}px)`,
+            }"
+          >
+            <h2 class="text-sm font-bold text-primary tracking-[0.5em] uppercase mb-4">
+              Kapabilitas Kami
+            </h2>
+            <h3 class="text-3xl md:text-5xl font-bold">Solusi Tanpa Batas</h3>
+            <p class="mt-6 text-muted-foreground text-lg max-w-2xl leading-relaxed">
+              Dari pengembangan website hingga sistem terintegrasi yang kompleks, kami meramu
+              teknologi terkini untuk mewujudkan visi digital Anda. Tak ada batasan, hanya
+              kemungkinan.
+            </p>
+          </Motion>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[300px]">
-          <Motion
+          <div
             v-for="(service, i) in services"
             :key="service.id"
             :class="[
               'group relative rounded-3xl overflow-hidden border border-white/5 bg-card/20 backdrop-blur-md transition-all duration-500 hover:border-primary/30 hover:shadow-[0_0_30px_rgba(49,105,78,0.1)]',
               getCardColSpan(i),
             ]"
-            :initial="{ opacity: 0, scale: 0.95 }"
-            :whileInView="{ opacity: 1, scale: 1 }"
-            :transition="{ delay: i * 0.05, duration: 0.5 }"
-            viewport="{ once: true }"
           >
             <!-- Background Image -->
             <img
@@ -310,24 +301,32 @@ const processes = [
             <div
               class="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-15"
             ></div>
-          </Motion>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- 5. CTA -->
     <section class="py-24 md:py-32 px-4 text-center">
-      <div class="max-w-3xl mx-auto space-y-8">
-        <h2 class="text-4xl md:text-6xl font-bold tracking-tighter">
-          Mulai Transformasi Digital Anda
-        </h2>
+      <Motion
+        :ref="(el) => (cta.targetRef.value = el as HTMLElement)"
+        class="max-w-3xl mx-auto space-y-8"
+        :style="{
+          opacity: cta.opacity,
+          scale: cta.scale,
+          y: cta.y,
+          filter: `blur(${cta.blur}px)`,
+        }"
+      >
+        <h2 class="text-4xl md:text-6xl font-bold tracking-tighter">Mari Wujudkan Ide Bersama</h2>
         <p class="text-xl text-muted-foreground">Diskusikan kebutuhan Anda dengan tim ahli kami.</p>
 
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
           <RouterLink
             to="/kontak"
-            class="inline-flex h-14 items-center justify-center rounded-full bg-primary px-8 text-lg font-medium text-white shadow transition-colors hover:bg-primary/90"
+            class="inline-flex h-14 items-center justify-center gap-2 rounded-full bg-primary px-8 text-lg font-medium text-white shadow transition-colors hover:bg-primary/90"
           >
+            <Mail class="w-5 h-5" />
             Hubungi Kami
           </RouterLink>
           <RouterLink
@@ -337,7 +336,7 @@ const processes = [
             Lihat Portofolio
           </RouterLink>
         </div>
-      </div>
+      </Motion>
     </section>
   </main>
 </template>

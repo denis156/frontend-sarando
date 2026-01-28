@@ -55,7 +55,7 @@ import SubmarkLogo from '@/assets/submark-logo.png'
     <div
       class="max-w-7xl mx-auto px-6 mt-16 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground"
     >
-      <p>&copy; {{ new Date().getFullYear() }} SARANA DIGITAL ANANDONIA. All rights reserved.</p>
+      <p>&copy; {{ new Date().getFullYear() }} PT SARANA DIGITAL ANANDONIA. All rights reserved.</p>
       <div class="flex gap-6">
         <a href="#" class="hover:text-foreground">Privacy Policy</a>
         <a href="#" class="hover:text-foreground">Terms of Service</a>

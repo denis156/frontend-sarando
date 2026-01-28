@@ -244,7 +244,9 @@ const scrollToScene = (index: number) => {
                   >
                     Sara
                   </h2>
-                  <p class="text-muted-foreground mt-2 text-base md:text-lg">Adat / Tradisi</p>
+                  <p class="text-muted-foreground mt-2 text-base md:text-lg">
+                    Adat & Tradisi Leluhur
+                  </p>
                 </div>
                 <!-- Mobile Divider -->
                 <div class="w-16 h-px bg-border md:hidden"></div>
@@ -254,14 +256,14 @@ const scrollToScene = (index: number) => {
                   >
                     Ndo
                   </h2>
-                  <p class="text-muted-foreground mt-2 text-base md:text-lg">Kita / Orang Kita</p>
+                  <p class="text-muted-foreground mt-2 text-base md:text-lg">Kebersamaan Kita</p>
                 </div>
               </div>
 
               <p class="text-lg md:text-3xl text-muted-foreground leading-relaxed font-light px-4">
-                "Kami membawa nilai leluhur ke dalam era digital.
-                <span class="text-primary font-medium">Bukan sekadar kode,</span>
-                tapi dedikasi untuk tanah air."
+                "Kami menyatukan kearifan lokal dengan inovasi digital.
+                <span class="text-primary font-medium">Bukan sekadar menulis kode,</span>
+                tapi merakit masa depan dari tanah Konawe, Sulawesi Tenggara."
               </p>
             </div>
           </Motion>
@@ -271,7 +273,7 @@ const scrollToScene = (index: number) => {
         <AnimatePresence>
           <Motion
             v-if="currentSceneIndex === 2"
-            class="absolute inset-0 flex items-center justify-center p-6"
+            class="absolute inset-0 flex items-start pt-20 md:items-center md:pt-0 justify-center p-6"
             :initial="{ opacity: 0, x: 50 }"
             :animate="{ opacity: 1, x: 0 }"
             :exit="{ opacity: 0, x: -50 }"
@@ -298,9 +300,10 @@ const scrollToScene = (index: number) => {
                 <p
                   class="text-sm md:text-lg text-muted-foreground leading-relaxed pl-4 md:pl-6 border-l-4 border-transparent"
                 >
-                  Seringkali talenta dari daerah dipandang sebelah mata. Ada anggapan bahwa solusi
-                  IT berkualitas hanya datang dari kota besar atau luar negeri. Padahal, potensi
-                  anak bangsa di Konawe tak kalah bersaing.
+                  Seringkali potensi daerah dipandang sebelah mata. Padahal, inovasi tidak mengenal
+                  batas geografis. Kami membuktikan bahwa talenta dari
+                  <strong>Konawe, Sulawesi Tenggara</strong> mampu melahirkan solusi teknologi
+                  berstandar global yang presisi, tangguh, dan estetik.
                 </p>
               </div>
 
@@ -340,14 +343,15 @@ const scrollToScene = (index: number) => {
                 Misi Kami
               </h2>
               <h3 class="text-3xl md:text-6xl font-bold leading-tight">
-                Membuktikan bahwa <span class="text-white border-b-2 border-primary">Konawe</span>
+                Membuktikan Bahwa
+                <span class="text-white border-b-2 border-primary">Putra Daerah</span>
                 <br />
-                Bisa Mendunia
+                Mampu Mendunia
               </h3>
               <p class="text-base md:text-xl text-muted-foreground max-w-2xl mx-auto">
-                Kami hadir untuk menutup celah kepercayaan itu. Dengan standar pengembangan software
-                modern, kedisiplinan tinggi, dan semangat "SARA", kami memberikan hasil yang
-                melampaui ekspektasi.
+                Kami hadir untuk menjawab keraguan dengan karya nyata. Berbekal disiplin tinggi dan
+                semangat "SARANDO", kami menghadirkan teknologi yang tidak hanya canggih, tapi juga
+                bernilai.
               </p>
             </div>
           </Motion>
@@ -365,7 +369,7 @@ const scrollToScene = (index: number) => {
           >
             <div class="w-full max-w-6xl px-4">
               <h2 class="text-xl md:text-4xl font-bold mb-6 md:mb-12 text-center">
-                Layanan Unggulan
+                Solusi & Layanan
               </h2>
               <div class="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-6">
                 <Motion
@@ -401,7 +405,7 @@ const scrollToScene = (index: number) => {
                   to="/layanan"
                   class="inline-flex items-center gap-2 text-neutral-400 hover:text-white transition-colors border-b border-transparent hover:border-white pb-1 text-xs md:text-base"
                 >
-                  Lihat semua layanan <ExternalLink class="w-3 h-3 md:w-4 md:h-4" />
+                  Eksplorasi Semua Layanan <ExternalLink class="w-3 h-3 md:w-4 md:h-4" />
                 </RouterLink>
               </div>
             </div>
@@ -435,21 +439,22 @@ const scrollToScene = (index: number) => {
                 <div>
                   <h2 class="text-2xl md:text-3xl font-bold text-white">Denis Djodian Ardika</h2>
                   <p class="text-primary font-medium text-sm md:text-base">
-                    Founder & Lead Developer
+                    Pendiri & Lead Developer
                   </p>
                 </div>
                 <p class="text-muted-foreground leading-relaxed italic text-sm md:text-base">
-                  "Saya mendirikan SARANDO pada tahun 2026 dengan satu keyakinan: Teknologi adalah
-                  alat untuk mengangkat martabat daerah. Dengan pengalaman 4 tahun di industri, saya
-                  ingin membuktikan bahwa anak daerah bisa menjadi pemain global."
+                  "Walaupun Sarando baru berdiri tahun 2026, pengalaman saya selama lebih dari 4
+                  tahun di industri IT menjadi fondasi tim ini. Bersama Sarana Digital Anandonia,
+                  kami siap membantu Anda dengan sistem yang kami bangun—membuktikan bahwa dedikasi
+                  putra daerah mampu memberikan solusi berkelas dunia."
                 </p>
                 <div
                   class="flex flex-wrap gap-4 justify-center md:justify-start text-xs md:text-sm text-muted-foreground"
                 >
                   <div class="flex items-center gap-1">
-                    <MapPin class="w-3 h-3 md:w-4 md:h-4" /> Konawe, Sultra
+                    <MapPin class="w-3 h-3 md:w-4 md:h-4" /> Konawe, Sulawesi Tenggara
                   </div>
-                  <div class="flex items-center gap-1">Since 2026</div>
+                  <div class="flex items-center gap-1">Est. 2026</div>
                 </div>
               </div>
             </div>
@@ -489,8 +494,8 @@ const scrollToScene = (index: number) => {
                   variant="outline"
                   class="px-8 text-base md:text-lg h-12 md:h-14 rounded-full border-border hover:bg-secondary/10 text-white w-full sm:w-auto"
                 >
-                  <RouterLink to="/proyek" class="flex items-center justify-center w-full">
-                    Lihat Portofolio
+                  <RouterLink to="/layanan" class="flex items-center justify-center w-full">
+                    Pelajari Layanan
                   </RouterLink>
                 </Button>
               </div>
