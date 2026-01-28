@@ -139,6 +139,32 @@ const scrollToScene = (index: number) => {
           class="absolute inset-0 bg-gradient-to-b from-background/50 via-background/80 to-background transition-opacity duration-700"
           :class="[currentSceneIndex === 0 ? 'opacity-0' : 'opacity-100']"
         ></div>
+
+        <!-- Persistent World Map Layer (Fixes lag by mounting once) -->
+        <div
+          class="absolute inset-0 flex items-center justify-center transition-opacity duration-700 ease-in-out pointer-events-none"
+          :class="[currentSceneIndex === 2 ? 'opacity-100' : 'opacity-0']"
+        >
+          <div
+            class="w-full max-w-6xl px-4 md:px-8 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12"
+          >
+            <!-- Spacer for text column -->
+            <div class="hidden md:block"></div>
+
+            <!-- Map Container Positioned to match Scene 3 layout -->
+            <div
+              class="relative h-[250px] md:h-[400px] w-full bg-card/50 rounded-2xl overflow-hidden border border-border backdrop-blur-sm flex items-center justify-center"
+            >
+              <WorldMap
+                :dots="mapDots"
+                line-color="var(--primary)"
+                map-color="#FFFFFF40"
+                map-bg-color="transparent"
+                class="w-full h-full"
+              />
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Content Layer -->
@@ -276,21 +302,10 @@ const scrollToScene = (index: number) => {
                   anak bangsa di Konawe tak kalah bersaing.
                 </p>
               </div>
-              <div
-                class="relative h-[250px] md:h-[400px] w-full bg-card/50 rounded-2xl overflow-hidden border border-border backdrop-blur-sm flex items-center justify-center order-1 md:order-2"
-              >
-                <!-- World Map Visualization -->
-                <div
-                  class="absolute inset-0 w-full h-full flex items-center justify-center pointer-events-none"
-                >
-                  <WorldMap
-                    :dots="mapDots"
-                    line-color="var(--primary)"
-                    map-color="#FFFFFF40"
-                    map-bg-color="transparent"
-                    class="w-full h-full"
-                  />
-                </div>
+
+              <!-- Placeholder for layout spacing, actual map is in persistent background layer -->
+              <div class="h-[250px] md:h-[400px] w-full order-1 md:order-2 invisible">
+                <!-- Invisible spacer to keep layout grid intact -->
               </div>
             </div>
           </Motion>
