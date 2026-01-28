@@ -73,11 +73,7 @@
                 alt="Sarando Logo"
                 class="w-20 h-20 rounded-full object-cover lg:hidden"
               />
-              <img
-                :src="PrimaryLogo"
-                alt="Sarando Logo"
-                class="hidden lg:block h-32"
-              />
+              <img :src="PrimaryLogo" alt="Sarando Logo" class="hidden lg:block h-32" />
             </Motion>
 
             <Motion
@@ -113,7 +109,7 @@
               :transition="{ duration: 0.8, delay: 0.4, ease: 'easeOut' }"
             >
               <div class="flex flex-row gap-4 justify-center lg:justify-start">
-                <Button as-child size="lg" >
+                <Button as-child size="lg">
                   <RouterLink to="/kontak">Konsultasi Gratis</RouterLink>
                 </Button>
                 <Button size="lg" variant="secondary" @click="scrollToLayanan">
@@ -246,7 +242,11 @@
               :inViewOptions="{ amount: 0.2 }"
             >
               <Card
-                :class="serviceIndex % 2 === 0 ? 'bg-primary border-tertiary/20' : 'bg-accent border-tertiary/20'"
+                :class="
+                  serviceIndex % 2 === 0
+                    ? 'bg-primary border-tertiary/20'
+                    : 'bg-accent border-tertiary/20'
+                "
                 class="text-white h-full"
               >
                 <CardHeader>
@@ -314,7 +314,7 @@
           <Button as-child size="lg">
             <RouterLink to="/proyek">Jelajahi Proyek</RouterLink>
           </Button>
-          <Button as-child size="lg" variant="secondary" >
+          <Button as-child size="lg" variant="secondary">
             <RouterLink to="/kontak">Hubungi Kami</RouterLink>
           </Button>
         </motion.div>
@@ -372,7 +372,11 @@ const getIcon = (iconName: string) => {
 // Format harga ke Rupiah
 const formatPrice = (price: string) => {
   const num = Number(price)
-  return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(num)
+  return new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+    minimumFractionDigits: 0,
+  }).format(num)
 }
 
 // Scroll ke section layanan
