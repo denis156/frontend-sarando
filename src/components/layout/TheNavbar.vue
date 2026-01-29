@@ -1,13 +1,18 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import { Motion, AnimatePresence } from 'motion-v'
 import { Menu, X } from 'lucide-vue-next'
-import { MENU_ITEMS, SOCIAL_ITEMS } from '@/constants/navigation'
+import { MENU_ITEMS } from '@/constants/navigation'
+import { useAppearance } from '@/composables/useAppearance'
 import SubmarkLogo from '@/assets/submark-logo.png'
 
 const route = useRoute()
 const isOpen = ref(false)
+
+// Fetch appearance settings from API (socialLinks auto-detected from keys ending with _link)
+const { socialLinks, fetchAppearance } = useAppearance()
+onMounted(() => fetchAppearance())
 
 const toggleMenu = () => {
   isOpen.value = !isOpen.value
@@ -132,15 +137,16 @@ const itemVariants: any = {
             </Motion>
           </Motion>
 
-          <!-- Socials -->
+          <!-- Socials (auto-detected from keys ending with _link) -->
           <Motion
+            v-if="socialLinks.length > 0"
             class="mt-16 flex gap-8"
             :initial="{ opacity: 0, y: 20 }"
             :animate="{ opacity: 1, y: 0 }"
             :transition="{ delay: 0.6 }"
           >
             <a
-              v-for="social in SOCIAL_ITEMS"
+              v-for="social in socialLinks"
               :key="social.link"
               :href="social.link"
               target="_blank"

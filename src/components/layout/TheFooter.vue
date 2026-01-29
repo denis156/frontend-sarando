@@ -1,7 +1,13 @@
 <script setup lang="ts">
+import { onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
-import { MENU_ITEMS, SOCIAL_ITEMS } from '@/constants/navigation'
+import { MENU_ITEMS } from '@/constants/navigation'
+import { useAppearance } from '@/composables/useAppearance'
 import SubmarkLogo from '@/assets/submark-logo.png'
+
+// Fetch appearance settings from API (socialLinks auto-detected from keys ending with _link)
+const { socialLinks, fetchAppearance } = useAppearance()
+onMounted(() => fetchAppearance())
 </script>
 
 <template>
@@ -34,11 +40,11 @@ import SubmarkLogo from '@/assets/submark-logo.png'
         </ul>
       </div>
 
-      <!-- Socials / Contact -->
-      <div class="space-y-6">
+      <!-- Socials / Contact (auto-detected from keys ending with _link) -->
+      <div v-if="socialLinks.length > 0" class="space-y-6">
         <h4 class="text-lg font-semibold text-foreground">Sosial</h4>
         <ul class="space-y-4">
-          <li v-for="social in SOCIAL_ITEMS" :key="social.link">
+          <li v-for="social in socialLinks" :key="social.link">
             <a
               :href="social.link"
               target="_blank"
