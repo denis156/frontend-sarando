@@ -1,15 +1,21 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRoute } from 'vue-router'
 import { Motion, AnimatePresence } from 'motion-v'
 import { Menu, X } from 'lucide-vue-next'
 import { MENU_ITEMS, SOCIAL_ITEMS } from '@/constants/navigation'
 import SubmarkLogo from '@/assets/submark-logo.png'
 
+const route = useRoute()
 const isOpen = ref(false)
 
 const toggleMenu = () => {
   isOpen.value = !isOpen.value
+}
+
+const isActive = (path: string) => {
+  if (path === '/') return route.path === '/'
+  return route.path.startsWith(path)
 }
 
 // Animation variants
@@ -112,7 +118,7 @@ const itemVariants: any = {
                 :to="item.link"
                 class="text-4xl md:text-6xl font-bold transition-colors tracking-tight relative group"
                 :class="[
-                  $route.path === item.link ? 'text-primary' : 'text-foreground hover:text-primary',
+                  isActive(item.link) ? 'text-primary' : 'text-foreground hover:text-primary',
                 ]"
                 @click="toggleMenu"
               >
@@ -120,7 +126,7 @@ const itemVariants: any = {
                 <!-- Underline effect -->
                 <span
                   class="absolute -bottom-2 left-0 h-1 bg-secondary transition-all duration-300 group-hover:w-full"
-                  :class="[$route.path === item.link ? 'w-full' : 'w-0']"
+                  :class="[isActive(item.link) ? 'w-full' : 'w-0']"
                 ></span>
               </RouterLink>
             </Motion>

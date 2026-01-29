@@ -248,11 +248,12 @@ const timelineData = computed(() =>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[300px]">
-          <div
+          <RouterLink
             v-for="(service, i) in services"
             :key="service.id"
+            :to="'/layanan/' + service.slug"
             :class="[
-              'group relative rounded-3xl overflow-hidden border border-white/5 bg-card/20 backdrop-blur-md transition-all duration-500 hover:border-primary/30 hover:shadow-[0_0_30px_rgba(49,105,78,0.1)]',
+              'group relative rounded-3xl overflow-hidden border border-white/5 bg-card/20 backdrop-blur-md transition-all duration-500 hover:border-primary/30 hover:shadow-[0_0_30px_rgba(49,105,78,0.1)] block',
               getCardColSpan(i),
             ]"
           >
@@ -301,7 +302,7 @@ const timelineData = computed(() =>
             <div
               class="absolute inset-0 bg-linear-to-br from-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-15"
             ></div>
-          </div>
+          </RouterLink>
         </div>
       </div>
     </section>
