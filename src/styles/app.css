@@ -3,6 +3,17 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Root containers - required for motion-v scroll calculations */
+html,
+body {
+  position: relative;
+}
+
+#app {
+  position: relative;
+  min-height: 100dvh;
+}
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);

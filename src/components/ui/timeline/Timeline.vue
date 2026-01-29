@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { HTMLAttributes } from 'vue'
-import { ref, shallowRef, onMounted, nextTick, watch } from 'vue'
+import { ref, onMounted, nextTick } from 'vue'
 import { Motion, useScroll, useTransform } from 'motion-v'
 
 interface Props {
@@ -36,15 +36,12 @@ const { scrollYProgress } = useScroll({
 })
 
 const opacityTransform = useTransform(scrollYProgress, [0, 0.1], [0, 1])
-const heightTransform = shallowRef(useTransform(scrollYProgress, [0, 1], [0, 0]))
-
-watch(height, (newHeight: number) => {
-  heightTransform.value = useTransform(scrollYProgress, [0, 1], [0, newHeight])
-})
+// Use function mapper so height.value is reactive
+const heightTransform = useTransform(scrollYProgress, (progress) => progress * height.value)
 </script>
 
 <template>
-  <div ref="timelineContainerRef" class="w-full font-sans md:px-10">
+  <div ref="timelineContainerRef" class="relative w-full font-sans md:px-10">
     <div ref="timelineRef" class="relative z-0 mx-auto max-w-7xl pb-20">
       <div
         v-for="(item, index) in props.items"
