@@ -48,6 +48,14 @@ export const routes: RouteRecordRaw[] = [
         },
       },
       {
+        path: 'proyek/:slug',
+        name: 'detail-proyek',
+        component: () => import('@/views/DetailProyek.vue'),
+        meta: {
+          title: 'Detail Proyek',
+        },
+      },
+      {
         path: 'layanan',
         name: 'layanan',
         component: () => import('@/views/Layanan.vue'),
