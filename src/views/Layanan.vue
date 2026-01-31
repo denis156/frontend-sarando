@@ -10,6 +10,15 @@ import Threads from '@/components/ui/background/Threads.vue'
 import { getServices } from '@/api/services'
 import type { Service } from '@/types/service'
 import { useScrollAnimation } from '@/composables/useScrollAnimation'
+import { useSeoMeta } from '@/composables/useSeoMeta'
+
+// SEO Meta
+useSeoMeta({
+  title: 'Layanan',
+  description:
+    'Layanan pengembangan website, aplikasi mobile, dan sistem digital dari Sarando. Solusi teknologi untuk bisnis Anda dengan sentuhan kearifan lokal.',
+  url: 'https://sarando.site/layanan',
+})
 
 const services = ref<Service[]>([])
 

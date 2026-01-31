@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 import { useRoute, useRouter, RouterLink } from 'vue-router'
 import { Motion, AnimatePresence } from 'motion-v'
 import {
@@ -21,10 +21,28 @@ import type { Service } from '@/types/service'
 
 import { useCurrency } from '@/composables/useCurrency'
 import { useScrollAnimation } from '@/composables/useScrollAnimation'
+import { useSeoMeta } from '@/composables/useSeoMeta'
 
 const route = useRoute()
 const router = useRouter()
 const { formatRupiah } = useCurrency()
+
+// Service data - akan di-fetch
+const service = ref<Service | null>(null)
+
+// Dynamic SEO Meta - reaktif berdasarkan data service
+const seoTitle = computed(() => service.value?.name || 'Detail Layanan')
+const seoDescription = computed(() => service.value?.description || null)
+const seoImage = computed(() => service.value?.image_path || null)
+const seoUrl = computed(() => `https://sarando.site/layanan/${route.params.slug}`)
+
+useSeoMeta({
+  title: seoTitle,
+  description: seoDescription,
+  image: seoImage,
+  url: seoUrl,
+  type: 'product',
+})
 
 // Scroll Animations
 const heroText = useScrollAnimation('fadeUp')
@@ -32,7 +50,6 @@ const heroDesc = useScrollAnimation('fadeUp', { distance: 30 })
 const heroImage = useScrollAnimation('scaleUp')
 const ctaAnimation = useScrollAnimation('scaleUp')
 
-const service = ref<Service | null>(null)
 const loading = ref(true)
 const error = ref<string | null>(null)
 

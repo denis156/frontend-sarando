@@ -1,87 +1,94 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import type { RouteRecordRaw } from 'vue-router'
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
 import Beranda from '@/views/Beranda.vue'
 
-const APP_NAME = import.meta.env.VITE_APP_NAME || 'Sarando'
-
-const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
-    {
-      path: '/',
-      component: DefaultLayout,
-      children: [
-        {
-          path: '',
-          name: 'beranda',
-          component: Beranda,
-          meta: { title: 'Beranda' },
-        },
-        {
-          path: 'blog',
-          name: 'blog',
-          component: () => import('@/views/Blog.vue'),
-          meta: { title: 'Blog' },
-        },
-        {
-          path: 'proyek',
-          name: 'proyek',
-          component: () => import('@/views/Proyek.vue'),
-          meta: { title: 'Proyek' },
-        },
-        {
-          path: 'layanan',
-          name: 'layanan',
-          component: () => import('@/views/Layanan.vue'),
-          meta: { title: 'Layanan' },
-        },
-        {
-          path: 'layanan/:slug',
-          name: 'detail-layanan',
-          component: () => import('@/views/DetailLayanan.vue'),
-          meta: { title: 'Detail Layanan' },
-        },
-        {
-          path: 'kontak',
-          name: 'kontak',
-          component: () => import('@/views/Kontak.vue'),
-          meta: { title: 'Kontak' },
-        },
-      ],
-    },
-  ],
-  scrollBehavior(to, from, savedPosition) {
-    if (savedPosition) {
-      return savedPosition
-    } else {
-      return { top: 0, behavior: 'smooth' }
-    }
-  },
-})
-
-// Page Transition Loader Logic
-import { usePageLoader } from '@/composables/usePageLoader'
-
-router.beforeEach((to, from, next) => {
-  const { startLoading } = usePageLoader()
-  // Trigger loading on route change
-  if (to.path !== from.path) {
-    startLoading()
+// SEO Meta Types
+declare module 'vue-router' {
+  interface RouteMeta {
+    title?: string
+    description?: string
+    ogImage?: string
   }
-  next()
-})
+}
 
-router.afterEach((to) => {
-  const { finishLoading } = usePageLoader()
+// Export routes sebagai array untuk ViteSSG
+export const routes: RouteRecordRaw[] = [
+  {
+    path: '/',
+    component: DefaultLayout,
+    children: [
+      {
+        path: '',
+        name: 'beranda',
+        component: Beranda,
+        meta: {
+          title: 'Beranda',
+          description:
+            'Sarando - Sarana Digital Anandonia. Adat yang bertemu teknologi. Merakit solusi digital berstandar global dengan jiwa kearifan lokal dari Konawe, Sulawesi Tenggara.',
+        },
+      },
+      {
+        path: 'blog',
+        name: 'blog',
+        component: () => import('@/views/Blog.vue'),
+        meta: {
+          title: 'Blog & Wawasan',
+          description:
+            'Artikel dan cerita inspiratif seputar teknologi, bisnis digital, dan kearifan lokal dari tim Sarando.',
+        },
+      },
+      {
+        path: 'proyek',
+        name: 'proyek',
+        component: () => import('@/views/Proyek.vue'),
+        meta: {
+          title: 'Proyek Kami',
+          description:
+            'Koleksi karya dan portofolio terbaik dari Sarando. Solusi digital yang telah kami bangun untuk berbagai klien.',
+        },
+      },
+      {
+        path: 'layanan',
+        name: 'layanan',
+        component: () => import('@/views/Layanan.vue'),
+        meta: {
+          title: 'Layanan',
+          description:
+            'Layanan pengembangan website, aplikasi mobile, dan sistem digital dari Sarando. Solusi teknologi untuk bisnis Anda.',
+        },
+      },
+      {
+        path: 'layanan/:slug',
+        name: 'detail-layanan',
+        component: () => import('@/views/DetailLayanan.vue'),
+        meta: {
+          title: 'Detail Layanan',
+          // Meta dinamis akan di-set oleh component dengan useSeoMeta
+        },
+      },
+      {
+        path: 'kontak',
+        name: 'kontak',
+        component: () => import('@/views/Kontak.vue'),
+        meta: {
+          title: 'Hubungi Kami',
+          description:
+            'Hubungi tim Sarando untuk konsultasi gratis tentang kebutuhan digital bisnis Anda. Kami siap membantu dari Konawe, Sulawesi Tenggara.',
+        },
+      },
+    ],
+  },
+]
 
-  // Update document title
-  const pageTitle = to.meta.title as string | undefined
-  document.title = pageTitle ? `${pageTitle} - ${APP_NAME}` : APP_NAME
-
-  // Add a small delay to simulate loading or ensure entering animation plays
-  setTimeout(() => {
-    finishLoading()
-  }, 800)
-})
-
-export default router
+// Scroll behavior untuk router
+export const scrollBehavior = (
+  to: { hash: string },
+  from: unknown,
+  savedPosition: { left: number; top: number } | null,
+) => {
+  if (savedPosition) {
+    return savedPosition
+  } else {
+    return { top: 0, behavior: 'smooth' as const }
+  }
+}

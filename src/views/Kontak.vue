@@ -1,5 +1,14 @@
 <script setup lang="ts">
 import ComingSoon from '@/components/ui/ComingSoon.vue'
+import { useSeoMeta } from '@/composables/useSeoMeta'
+
+// SEO Meta
+useSeoMeta({
+  title: 'Hubungi Kami',
+  description:
+    'Hubungi tim Sarando untuk konsultasi gratis tentang kebutuhan digital bisnis Anda. Kami siap membantu dari Konawe, Sulawesi Tenggara.',
+  url: 'https://sarando.site/kontak',
+})
 </script>
 
 <template>

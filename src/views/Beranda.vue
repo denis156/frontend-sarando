@@ -12,6 +12,15 @@ import { Globe } from '@/components/ui/globe'
 
 import { getFeaturedServices } from '@/api/services'
 import type { Service } from '@/types/service'
+import { useSeoMeta } from '@/composables/useSeoMeta'
+
+// SEO Meta
+useSeoMeta({
+  title: 'Beranda',
+  description:
+    'Sarando - Sarana Digital Anandonia. Adat yang bertemu teknologi. Merakit solusi digital berstandar global dengan jiwa kearifan lokal dari Konawe, Sulawesi Tenggara.',
+  url: 'https://sarando.site/',
+})
 
 // --- Constants ---
 const SCENE_COUNT = 7 // Hero, Origin, Problem, Solution, Services, Founder, CTA
