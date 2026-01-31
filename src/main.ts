@@ -60,31 +60,58 @@ export async function includedRoutes(
   // Static routes
   const staticRoutes = ['/', '/blog', '/proyek', '/layanan', '/kontak']
 
-  // Fetch dynamic routes dari API
-  try {
-    const API_URL = import.meta.env.VITE_API_URL || 'https://sarando.site/api'
-    const response = await fetch(`${API_URL}/services`)
+  // API configuration
+  const API_URL = import.meta.env.VITE_BACKEND_APP_URL || 'https://sarando.site/api'
+  const API_KEY = import.meta.env.VITE_BACKEND_APP_KEY || ''
 
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`)
-    }
-
-    const json = await response.json()
-
-    // API response format: { data: Service[] }
-    const services = json.data || json
-
-    if (!Array.isArray(services)) {
-      throw new Error('Invalid API response: expected array of services')
-    }
-
-    // Generate routes untuk setiap service slug
-    const dynamicRoutes = services.map((service: { slug: string }) => `/layanan/${service.slug}`)
-
-    console.log('[SSG] Pre-rendering routes:', [...staticRoutes, ...dynamicRoutes])
-    return [...staticRoutes, ...dynamicRoutes]
-  } catch (error) {
-    console.warn('[SSG] Failed to fetch dynamic routes, using static only:', error)
-    return staticRoutes
+  const headers: HeadersInit = {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
   }
+
+  if (API_KEY) {
+    headers['X-API-KEY'] = API_KEY
+  }
+
+  const dynamicRoutes: string[] = []
+
+  // Fetch services untuk dynamic routes
+  try {
+    const servicesResponse = await fetch(`${API_URL}/services`, { headers })
+
+    if (servicesResponse.ok) {
+      const servicesJson = await servicesResponse.json()
+      const services = servicesJson.data || servicesJson
+
+      if (Array.isArray(services)) {
+        services.forEach((service: { slug: string }) => {
+          dynamicRoutes.push(`/layanan/${service.slug}`)
+        })
+      }
+    }
+  } catch (error) {
+    console.warn('[SSG] Failed to fetch services:', error)
+  }
+
+  // Fetch projects untuk dynamic routes
+  try {
+    const projectsResponse = await fetch(`${API_URL}/projects`, { headers })
+
+    if (projectsResponse.ok) {
+      const projectsJson = await projectsResponse.json()
+      const projects = projectsJson.data || projectsJson
+
+      if (Array.isArray(projects)) {
+        projects.forEach((project: { slug: string }) => {
+          dynamicRoutes.push(`/proyek/${project.slug}`)
+        })
+      }
+    }
+  } catch (error) {
+    console.warn('[SSG] Failed to fetch projects:', error)
+  }
+
+  const allRoutes = [...staticRoutes, ...dynamicRoutes]
+  console.log('[SSG] Pre-rendering routes:', allRoutes)
+  return allRoutes
 }
