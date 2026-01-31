@@ -61,6 +61,7 @@ useSeoMeta({
   description: seoDescription,
   image: seoImage,
   url: seoUrl,
+  type: 'article',
 })
 
 const fetchProject = async () => {
